@@ -67,7 +67,7 @@ export default function Header({ isAuthenticated: _isAuthenticated = false }: He
             <a href="/#contact" onClick={() => handleNavClick('#contact')} className="text-gray-600 hover:text-red-600 transition-colors font-medium text-sm">Contact</a>
             <a href={isLoggedIn ? '/portal' : '/login'} onClick={handlePortalClick} className="text-gray-600 hover:text-red-600 transition-colors font-medium text-sm">Client Portal</a>
             {isAdmin && (
-              <a href="/dashboard" className="text-gray-600 hover:text-red-600 transition-colors font-medium text-sm">Dashboard</a>
+              <a href="/admin" className="text-gray-600 hover:text-red-600 transition-colors font-medium text-sm">Admin</a>
             )}
             <a href="/referral" className="bg-red-600 text-white px-5 py-2.5 rounded-lg hover:bg-red-700 transition-colors font-semibold text-sm">
               Submit a Referral
@@ -94,7 +94,7 @@ export default function Header({ isAuthenticated: _isAuthenticated = false }: He
             <a href="/#contact" onClick={() => handleNavClick('#contact')} className="block py-2.5 px-2 text-gray-700 hover:text-red-600 font-medium">Contact</a>
             <a href={isLoggedIn ? '/portal' : '/login'} onClick={handlePortalClick} className="block py-2.5 px-2 text-gray-700 hover:text-red-600 font-medium">Client Portal</a>
             {isAdmin && (
-              <a href="/dashboard" className="block py-2.5 px-2 text-gray-700 hover:text-red-600 font-medium">Dashboard</a>
+              <a href="/admin" className="block py-2.5 px-2 text-gray-700 hover:text-red-600 font-medium">Admin</a>
             )}
             <a
               href="/referral"

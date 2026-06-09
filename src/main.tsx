@@ -24,10 +24,9 @@ if (path === '/referral') {
   component = <PortalReferralForm />;
 } else if (path === '/portal/account') {
   component = <AccountSettings />;
-} else if (path === '/dashboard') {
-  component = <Dashboard />;
-} else if (path === '/dashboard/view-document') {
-  component = <DocumentViewer />;
+} else if (path === '/dashboard' || path === '/dashboard/view-document') {
+  window.location.replace('/admin');
+  component = <Admin />;
 } else if (path === '/login') {
   component = <Login />;
 } else if (path === '/signup') {

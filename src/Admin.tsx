@@ -1,21 +1,54 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { LogOut, Loader2, CheckCircle, XCircle, ClipboardList, Users, Calendar, Building2, User, Package, Eye } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import Header from './Header';
+import ReferralDetail from './ReferralDetail';
 
 interface UserAccount {
   id: string;
-  company_name: string;
-  contact_name: string;
   email: string;
   approved: boolean;
   created_at: string;
 }
 
+interface Referral {
+  id: string;
+  referral_id: string;
+  created_at: string;
+  agency_name: string;
+  patient_first_name: string;
+  patient_last_name: string;
+  equipment_needed: string;
+  status: string;
+}
+
+const STATUS_OPTIONS = [
+  'Submitted', 'Under Insurance Review', 'Missing Documents',
+  'Processing', 'Scheduled', 'Delivered', 'Cancelled'
+];
+
+const STATUS_COLORS: Record<string, string> = {
+  'Submitted': 'bg-blue-50 text-blue-700 border-blue-200',
+  'Under Insurance Review': 'bg-yellow-50 text-yellow-700 border-yellow-200',
+  'Missing Documents': 'bg-red-50 text-red-700 border-red-200',
+  'Processing': 'bg-orange-50 text-orange-700 border-orange-200',
+  'Scheduled': 'bg-green-50 text-green-700 border-green-200',
+  'Delivered': 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  'Cancelled': 'bg-slate-50 text-slate-700 border-slate-200',
+};
+
 export default function Admin() {
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<'referrals' | 'accounts'>('referrals');
+
+  // Accounts state
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
   const [updating, setUpdating] = useState<string | null>(null);
+
+  // Referrals state
+  const [referrals, setReferrals] = useState<Referral[]>([]);
+  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+  const [selectedReferralId, setSelectedReferralId] = useState<string | null>(null);
 
   useEffect(() => {
     checkAdminAuth();
@@ -24,85 +57,55 @@ export default function Admin() {
   const checkAdminAuth = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { window.location.href = '/login'; return; }
 
-      if (!user) {
-        window.location.href = '/login';
-        return;
-      }
-
-      const { data: profile, error } = await supabase
+      const { data: profile } = await supabase
         .from('user_profiles')
         .select('is_admin, approved')
         .eq('id', user.id)
         .maybeSingle();
 
-      if (error) {
-        console.error('Database error fetching profile:', error);
-        window.location.href = '/pending-approval';
+      if (!profile?.is_admin) {
+        window.location.href = profile?.approved ? '/portal' : '/pending-approval';
         return;
       }
 
-      if (!profile) {
-        window.location.href = '/pending-approval';
-        return;
-      }
-
-      if (!profile.is_admin) {
-        if (profile.approved) {
-          window.location.href = '/portal';
-        } else {
-          window.location.href = '/pending-approval';
-        }
-        return;
-      }
-
-      await loadAccounts();
+      await Promise.all([loadAccounts(), loadReferrals()]);
       setLoading(false);
-    } catch (err) {
-      console.error('Unexpected error in checkAdminAuth:', err);
+    } catch {
       window.location.href = '/login';
     }
   };
 
   const loadAccounts = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('id, company_name, contact_name, email, approved, created_at')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error loading accounts:', error);
-        return;
-      }
-
-      setAccounts(data || []);
-    } catch (err) {
-      console.error('Error loading accounts:', err);
-    }
+    const { data } = await supabase
+      .from('user_profiles')
+      .select('id, email, approved, created_at')
+      .order('created_at', { ascending: false });
+    setAccounts(data || []);
   };
 
-  const toggleApproval = async (userId: string, currentStatus: boolean) => {
+  const loadReferrals = async () => {
+    const { data } = await supabase
+      .from('referrals')
+      .select('id, referral_id, created_at, agency_name, patient_first_name, patient_last_name, equipment_needed, status')
+      .order('created_at', { ascending: false });
+    setReferrals(data || []);
+  };
+
+  const toggleApproval = async (userId: string, current: boolean) => {
     setUpdating(userId);
-    try {
-      const { error } = await supabase
-        .from('user_profiles')
-        .update({ approved: !currentStatus })
-        .eq('id', userId);
+    await supabase.from('user_profiles').update({ approved: !current }).eq('id', userId);
+    await loadAccounts();
+    setUpdating(null);
+  };
 
-      if (error) {
-        console.error('Error updating approval:', error);
-        alert('Failed to update approval status');
-        return;
-      }
-
-      await loadAccounts();
-    } catch (err) {
-      console.error('Error updating approval:', err);
-      alert('Failed to update approval status');
-    } finally {
-      setUpdating(null);
-    }
+  const updateStatus = async (id: string, newStatus: string) => {
+    setUpdatingStatus(id);
+    const statusValue = newStatus.toLowerCase().replace(/ /g, '_');
+    await supabase.from('referrals').update({ status: statusValue, updated_at: new Date().toISOString() }).eq('id', id);
+    setReferrals(referrals.map(r => r.id === id ? { ...r, status: statusValue } : r));
+    setUpdatingStatus(null);
   };
 
   const handleLogout = async () => {
@@ -110,16 +113,13 @@ export default function Admin() {
     window.location.href = '/login';
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+  const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
+  });
+
+  const formatStatus = (s: string) => s.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
+  const pendingCount = accounts.filter(a => !a.approved).length;
 
   if (loading) {
     return (
@@ -132,119 +132,156 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-
       <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-8">
+
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                Admin Dashboard
-              </h1>
-              <p className="text-gray-600">
-                Manage client portal accounts
-              </p>
+              <h1 className="text-4xl font-bold text-gray-900 mb-1">Admin</h1>
+              <p className="text-gray-500">DME Medical Logistics internal dashboard</p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              <LogOut className="h-4 w-4" />
-              Logout
+            <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+              <LogOut className="h-4 w-4" /> Logout
             </button>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900">
-                User Accounts
-              </h2>
-              <p className="text-sm text-gray-600 mt-1">
-                Total: {accounts.length} accounts
-              </p>
-            </div>
+          {/* Tabs */}
+          <div className="flex gap-1 bg-gray-200 p-1 rounded-xl mb-8 w-fit">
+            <button
+              onClick={() => setTab('referrals')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${tab === 'referrals' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+            >
+              <ClipboardList className="h-4 w-4" />
+              Referrals
+              <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${tab === 'referrals' ? 'bg-red-100 text-red-600' : 'bg-gray-300 text-gray-600'}`}>
+                {referrals.length}
+              </span>
+            </button>
+            <button
+              onClick={() => setTab('accounts')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${tab === 'accounts' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+            >
+              <Users className="h-4 w-4" />
+              Accounts
+              {pendingCount > 0 && (
+                <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-yellow-100 text-yellow-700">
+                  {pendingCount} pending
+                </span>
+              )}
+            </button>
+          </div>
 
-            {accounts.length === 0 ? (
-              <div className="px-6 py-12 text-center">
-                <p className="text-gray-500 text-lg">
-                  No user accounts found.
-                </p>
-              </div>
-            ) : (
+          {/* ── REFERRALS TAB ── */}
+          {tab === 'referrals' && (
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Company / Agency
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Contact Name
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Email
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Created
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Action
-                      </th>
+                      {['Referral ID', 'Date Submitted', 'Agency', 'Patient', 'Equipment', 'Status', 'Actions'].map(h => (
+                        <th key={h} className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">{h}</th>
+                      ))}
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {accounts.map((account) => (
+                  <tbody className="divide-y divide-gray-200">
+                    {referrals.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="px-6 py-16 text-center text-gray-400">
+                          No referrals yet
+                        </td>
+                      </tr>
+                    ) : referrals.map(ref => {
+                      const fs = formatStatus(ref.status);
+                      return (
+                        <tr key={ref.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <ClipboardList className="h-4 w-4 text-gray-400" />
+                              <span className="text-sm font-medium text-gray-900">{ref.referral_id || '—'}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <Calendar className="h-4 w-4 text-gray-400" />
+                              <span className="text-sm text-gray-600">{formatDate(ref.created_at)}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <Building2 className="h-4 w-4 text-gray-400" />
+                              <span className="text-sm text-gray-900">{ref.agency_name || '—'}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <User className="h-4 w-4 text-gray-400" />
+                              <span className="text-sm text-gray-900">{ref.patient_first_name} {ref.patient_last_name}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 max-w-[200px]">
+                            <div className="flex items-center gap-2">
+                              <Package className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                              <span className="text-sm text-gray-600 truncate">{ref.equipment_needed || '—'}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <select
+                              value={fs}
+                              onChange={e => updateStatus(ref.id, e.target.value)}
+                              disabled={updatingStatus === ref.id}
+                              className={`text-xs px-3 py-1.5 rounded-full border font-semibold focus:outline-none ${STATUS_COLORS[fs] || 'bg-gray-50 text-gray-700 border-gray-200'} ${updatingStatus === ref.id ? 'opacity-50' : 'cursor-pointer'}`}
+                            >
+                              {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                            </select>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <button onClick={() => setSelectedReferralId(ref.id)} className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg font-medium transition-colors">
+                              <Eye className="h-4 w-4" /> View
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* ── ACCOUNTS TAB ── */}
+          {tab === 'accounts' && (
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      {['Email', 'Signed Up', 'Status', 'Action'].map(h => (
+                        <th key={h} className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {accounts.length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="px-6 py-16 text-center text-gray-400">No accounts yet</td>
+                      </tr>
+                    ) : accounts.map(account => (
                       <tr key={account.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                          {account.company_name}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">
-                          {account.contact_name}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600">
-                          {account.email}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600">
-                          {formatDate(account.created_at)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full ${
-                            account.approved
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-yellow-100 text-yellow-800'
-                          }`}>
-                            {account.approved ? (
-                              <>
-                                <CheckCircle className="h-3 w-3" />
-                                Approved
-                              </>
-                            ) : (
-                              <>
-                                <XCircle className="h-3 w-3" />
-                                Pending
-                              </>
-                            )}
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">{account.email}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">{formatDate(account.created_at)}</td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full ${account.approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                            {account.approved ? <><CheckCircle className="h-3 w-3" /> Approved</> : <><XCircle className="h-3 w-3" /> Pending</>}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 py-4">
                           <button
                             onClick={() => toggleApproval(account.id, account.approved)}
                             disabled={updating === account.id}
-                            className={`px-4 py-2 text-sm font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 transition-colors ${
-                              account.approved
-                                ? 'bg-red-100 text-red-700 hover:bg-red-200 focus:ring-red-500'
-                                : 'bg-green-100 text-green-700 hover:bg-green-200 focus:ring-green-500'
-                            }`}
+                            className={`px-4 py-2 text-sm font-semibold rounded-lg disabled:opacity-50 transition-colors ${account.approved ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200'}`}
                           >
-                            {updating === account.id ? (
-                              <Loader2 className="h-4 w-4 animate-spin inline" />
-                            ) : account.approved ? (
-                              'Revoke'
-                            ) : (
-                              'Approve'
-                            )}
+                            {updating === account.id ? <Loader2 className="h-4 w-4 animate-spin inline" /> : account.approved ? 'Revoke' : 'Approve'}
                           </button>
                         </td>
                       </tr>
@@ -252,10 +289,15 @@ export default function Admin() {
                   </tbody>
                 </table>
               </div>
-            )}
-          </div>
+            </div>
+          )}
+
         </div>
       </div>
+
+      {selectedReferralId && (
+        <ReferralDetail referralId={selectedReferralId} onClose={() => setSelectedReferralId(null)} />
+      )}
     </div>
   );
 }
