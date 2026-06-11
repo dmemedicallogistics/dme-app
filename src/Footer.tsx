@@ -37,7 +37,8 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-4 text-sm">Contact</h4>
             <div className="space-y-1 text-sm">
-              <p><a href="tel:+16308850414" className="hover:text-white transition-colors">(630) 885-0414</a></p>
+              <p><a href="tel:+16308850414" className="hover:text-white transition-colors">Phone: (630) 885-0414</a></p>
+              <p>Fax: (630) 360-2011</p>
               <p><a href="mailto:dmemedicallogistics@gmail.com" className="hover:text-white transition-colors break-all">dmemedicallogistics@gmail.com</a></p>
               <p className="mt-2">109 Fairfield Way Ste 106E<br />Bloomingdale, IL 60108</p>
             </div>

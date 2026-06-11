@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Phone, Clock } from 'lucide-react';
+import { Menu, X, Phone, Clock, Printer } from 'lucide-react';
 import { supabase } from './lib/supabase';
 
 interface HeaderProps {
@@ -53,6 +53,9 @@ export default function Header({ isAuthenticated: _isAuthenticated = false }: He
             <a href="tel:+16308850414" className="flex items-center gap-1.5 hover:text-white transition-colors font-medium">
               <Phone className="h-3 w-3 text-red-400" /> (630) 885-0414
             </a>
+            <span className="flex items-center gap-1.5">
+              <Printer className="h-3 w-3 text-red-400" /> Fax: (630) 360-2011
+            </span>
             <span className="hidden sm:flex items-center gap-1.5">
               <Clock className="h-3 w-3 text-red-400" /> Mon–Fri, 9 AM – 5 PM
             </span>

@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /portal
+Disallow: /admin
+Disallow: /login
+Disallow: /signup
+Disallow: /pending-approval
+Disallow: /forgot-password
+Disallow: /reset-password
+
+Sitemap: https://www.dmemedicallogistics.com/sitemap.xml

@@ -207,8 +207,9 @@ export default function ReferralForm() {
                 ))}
               </ul>
               <div className="mt-6 pt-5 border-t border-stone-100 text-sm text-stone-500">
-                <p className="font-semibold text-stone-700 mb-2">Need a hand? We're happy to take it by phone.</p>
+                <p className="font-semibold text-stone-700 mb-2">Prefer phone or fax? We take referrals both ways.</p>
                 <p className="flex items-center gap-2"><Phone className="h-3.5 w-3.5 text-red-600" /><a href="tel:+16308850414" className="text-red-600 hover:underline font-medium">(630) 885-0414</a></p>
+                <p className="mt-1">Fax: <span className="font-medium text-stone-700">(630) 360-2011</span></p>
                 <p className="mt-1"><a href="mailto:dmemedicallogistics@gmail.com" className="text-red-600 hover:underline text-xs">dmemedicallogistics@gmail.com</a></p>
               </div>
             </div>

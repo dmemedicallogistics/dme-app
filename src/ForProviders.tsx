@@ -63,7 +63,8 @@ export default function ForProviders() {
               </a>
             </div>
             <p className="text-sm text-stone-500 mt-5">
-              Prefer the phone? <a href="tel:+16308850414" className="text-red-600 font-semibold hover:underline">(630) 885-0414</a> — referrals accepted Mon–Fri, 9 AM–5 PM.
+              Prefer phone or fax? Call <a href="tel:+16308850414" className="text-red-600 font-semibold hover:underline">(630) 885-0414</a> or
+              fax referrals to <span className="text-stone-700 font-semibold">(630) 360-2011</span> — accepted Mon–Fri, 9 AM–5 PM.
             </p>
           </div>
 

@@ -55,8 +55,8 @@ export default function ForPatients() {
               <a href="tel:+16308850414" className="btn-primary !px-8 !py-4 text-lg">
                 <Phone className="h-5 w-5" /> Call (630) 885-0414
               </a>
-              <a href="/referral" className="btn-secondary !px-8 !py-4 text-lg">
-                Request Online
+              <a href="mailto:dmemedicallogistics@gmail.com" className="btn-secondary !px-8 !py-4 text-lg">
+                Email Us
               </a>
             </div>
             <p className="text-sm text-stone-500 mt-5">Monday–Friday, 9 AM – 5 PM · Leave a message anytime and we'll call you back.</p>
@@ -198,8 +198,8 @@ export default function ForPatients() {
             <a href="tel:+16308850414" className="inline-flex items-center gap-2 bg-white text-red-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-red-50 transition-colors shadow-lift">
               <Phone className="h-5 w-5" /> (630) 885-0414
             </a>
-            <a href="/referral" className="inline-flex items-center gap-2 border-2 border-white/40 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-colors">
-              Request Online <ArrowRight className="h-5 w-5" />
+            <a href="mailto:dmemedicallogistics@gmail.com" className="inline-flex items-center gap-2 border-2 border-white/40 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-colors">
+              Email Us <ArrowRight className="h-5 w-5" />
             </a>
           </div>
         </div>

@@ -19,6 +19,28 @@ import './index.css';
 
 const path = window.location.pathname;
 
+// Per-route SEO titles & descriptions
+const SEO: Record<string, { title: string; description: string }> = {
+  '/providers': {
+    title: 'For Healthcare Providers | DME Referrals in Chicagoland – DME Medical Logistics',
+    description: 'Refer DME patients in under 3 minutes. We verify insurance, handle prior authorization, and deliver bath safety and incontinence supplies within 48 hours. Online, phone, or fax referrals.',
+  },
+  '/patients': {
+    title: 'For Patients & Caregivers | Home Medical Supplies – DME Medical Logistics',
+    description: 'Bath safety equipment and incontinence supplies delivered to your home in Chicagoland. One phone call — we work with your doctor and insurance. Call (630) 885-0414.',
+  },
+  '/referral': {
+    title: 'Submit a Referral | DME Medical Logistics',
+    description: 'Submit a DME referral online in 2–3 minutes. Insurance verification and prior authorization handled. Serving Cook, DuPage, and surrounding Illinois counties.',
+  },
+};
+const seo = SEO[path];
+if (seo) {
+  document.title = seo.title;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', seo.description);
+  document.querySelector('link[rel="canonical"]')?.setAttribute('href', `https://www.dmemedicallogistics.com${path}`);
+}
+
 let component;
 if (path === '/providers') {
   component = <ForProviders />;

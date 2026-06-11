@@ -288,9 +288,10 @@ export default function App() {
               <div className="w-12 h-12 bg-red-50 border border-red-100 rounded-full flex items-center justify-center mb-5">
                 <Phone className="h-5 w-5 text-red-600" />
               </div>
-              <h3 className="font-display font-bold text-ink mb-2">Phone</h3>
+              <h3 className="font-display font-bold text-ink mb-2">Phone & Fax</h3>
               <p className="text-stone-500 text-sm mb-3">Call during business hours or leave a message anytime</p>
               <a href="tel:+16308850414" className="text-red-600 font-semibold hover:text-red-700">(630) 885-0414</a>
+              <p className="text-stone-600 text-sm mt-1.5 font-medium">Fax: (630) 360-2011</p>
             </div>
             <div className="card p-8">
               <div className="w-12 h-12 bg-red-50 border border-red-100 rounded-full flex items-center justify-center mb-5">
