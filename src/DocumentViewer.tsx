@@ -6,7 +6,7 @@ import Header from './Header';
 export default function DocumentViewer() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [documentUrl, setDocumentUrl] = useState<string | null>(null);
+  const [_documentUrl, _setDocumentUrl] = useState<string | null>(null);
 
   useEffect(() => {
     loadDocument();

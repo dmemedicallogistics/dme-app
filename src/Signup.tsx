@@ -89,21 +89,22 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <Header />
 
-      <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="pt-40 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              Create Account
+            <p className="eyebrow mb-3">Free For Referral Sources</p>
+            <h1 className="font-display text-4xl font-extrabold text-ink tracking-tight mb-2">
+              Create your portal account
             </h1>
-            <p className="text-gray-600">
-              Get started with your referral portal
+            <p className="text-stone-600">
+              Submit referrals faster and track every order in one place
             </p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="card p-8">
             {error && (
               <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start gap-2">
                 <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
@@ -126,7 +127,7 @@ export default function Signup() {
                     required
                     value={formData.companyName}
                     onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="input !pl-10"
                     placeholder="Your Company Name"
                   />
                 </div>
@@ -146,7 +147,7 @@ export default function Signup() {
                     required
                     value={formData.contactName}
                     onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="input !pl-10"
                     placeholder="Your Full Name"
                   />
                 </div>
@@ -166,7 +167,7 @@ export default function Signup() {
                     required
                     value={formData.contactPhone}
                     onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="input !pl-10"
                     placeholder="(555) 123-4567"
                   />
                 </div>
@@ -186,7 +187,7 @@ export default function Signup() {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="input !pl-10"
                     placeholder="you@company.com"
                   />
                 </div>
@@ -206,7 +207,7 @@ export default function Signup() {
                     required
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="input !pl-10"
                     placeholder="At least 6 characters"
                   />
                 </div>
@@ -215,7 +216,7 @@ export default function Signup() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="btn-primary w-full"
               >
                 {loading ? 'Creating Account...' : 'Create Account'}
               </button>

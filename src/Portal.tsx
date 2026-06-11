@@ -126,28 +126,26 @@ export default function Portal() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-cream flex items-center justify-center">
         <Loader2 className="h-8 w-8 text-red-600 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <Header />
 
-      <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="pt-36 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-8">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                Client Portal
+              <p className="eyebrow mb-2">{profile?.company_name}</p>
+              <h1 className="font-display text-4xl font-extrabold text-ink tracking-tight mb-2">
+                Welcome back, {profile?.contact_name?.split(' ')[0]}
               </h1>
-              <p className="text-gray-600">
-                Welcome back, {profile?.contact_name}
-              </p>
-              <p className="text-sm text-gray-500">
-                {profile?.company_name}
+              <p className="text-stone-600">
+                Track your referrals and message our team — all in one place.
               </p>
             </div>
             <button
@@ -160,35 +158,46 @@ export default function Portal() {
             </button>
           </div>
 
+          {/* Stats */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {[
+              { label: 'Total Referrals', value: referrals.length },
+              { label: 'In Progress', value: referrals.filter(r => !['completed', 'delivered', 'cancelled'].includes(r.status.toLowerCase())).length },
+              { label: 'Delivered', value: referrals.filter(r => ['completed', 'delivered'].includes(r.status.toLowerCase())).length },
+              { label: 'This Month', value: referrals.filter(r => new Date(r.created_at).getMonth() === new Date().getMonth() && new Date(r.created_at).getFullYear() === new Date().getFullYear()).length },
+            ].map(({ label, value }) => (
+              <div key={label} className="card p-5">
+                <p className="font-display text-3xl font-extrabold text-ink">{value}</p>
+                <p className="text-sm text-stone-500 mt-1">{label}</p>
+              </div>
+            ))}
+          </div>
+
           <div className="mb-6 flex flex-wrap gap-3">
-            <a
-              href="/portal/new-referral"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors shadow-md"
-            >
+            <a href="/portal/new-referral" className="btn-primary">
               <Plus className="h-5 w-5" />
               Submit New Referral
             </a>
-            <a
-              href="/portal/account"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-700 font-semibold rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors shadow-sm"
-            >
+            <a href="/portal/account" className="btn-secondary">
               <Settings className="h-5 w-5" />
               Account Settings
             </a>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900">
+          <div className="card overflow-hidden">
+            <div className="px-6 py-5 border-b border-stone-200">
+              <h2 className="font-display text-xl font-bold text-ink">
                 Your Referrals
               </h2>
             </div>
 
             {referrals.length === 0 ? (
-              <div className="px-6 py-12 text-center">
-                <p className="text-gray-500 text-lg">
-                  No referrals found for your account yet.
-                </p>
+              <div className="px-6 py-16 text-center">
+                <p className="text-stone-600 text-lg font-medium mb-1">No referrals yet</p>
+                <p className="text-stone-500 text-sm mb-6">Submit your first referral and it will show up here with live status updates.</p>
+                <a href="/portal/new-referral" className="btn-primary">
+                  <Plus className="h-4 w-4" /> Submit Your First Referral
+                </a>
               </div>
             ) : (
               <div className="overflow-x-auto">

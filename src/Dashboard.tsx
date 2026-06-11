@@ -36,7 +36,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function Dashboard() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [_isAuthenticated, setIsAuthenticated] = useState(false);
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -102,7 +102,7 @@ export default function Dashboard() {
       setUpdatingStatus(id);
       const statusValue = newStatus.toLowerCase().replace(/ /g, '_');
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('referrals')
         .update({
           status: statusValue,

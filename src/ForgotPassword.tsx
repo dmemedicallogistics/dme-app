@@ -36,10 +36,10 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <Header />
 
-      <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="pt-36 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md mx-auto">
           <div className="mb-8">
             <a

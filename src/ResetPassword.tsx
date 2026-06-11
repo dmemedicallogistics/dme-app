@@ -73,7 +73,7 @@ export default function ResetPassword() {
 
   if (checkingToken) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-cream flex items-center justify-center">
         <Loader2 className="h-8 w-8 text-red-600 animate-spin" />
       </div>
     );
@@ -81,9 +81,9 @@ export default function ResetPassword() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-cream">
         <Header />
-        <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="pt-36 pb-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-md mx-auto">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="px-8 py-10 text-center">
@@ -108,10 +108,10 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <Header />
 
-      <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="pt-36 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md mx-auto">
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="px-8 py-10">

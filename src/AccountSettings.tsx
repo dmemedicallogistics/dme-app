@@ -151,17 +151,17 @@ export default function AccountSettings() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-cream flex items-center justify-center">
         <Loader2 className="h-8 w-8 text-red-600 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <Header />
 
-      <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="pt-36 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-8">
             <div>
@@ -174,7 +174,7 @@ export default function AccountSettings() {
                   Back to Portal
                 </a>
               </div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              <h1 className="font-display text-4xl font-extrabold text-ink tracking-tight mb-2">
                 Account Settings
               </h1>
               <p className="text-gray-600">

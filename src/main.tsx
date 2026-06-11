@@ -1,9 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
+import ForProviders from './ForProviders.tsx';
+import ForPatients from './ForPatients.tsx';
 import ReferralForm from './ReferralForm.tsx';
 import PortalReferralForm from './PortalReferralForm.tsx';
-import Dashboard from './Dashboard.tsx';
+
 import Login from './Login.tsx';
 import Signup from './Signup.tsx';
 import Portal from './Portal.tsx';
@@ -12,13 +14,17 @@ import Admin from './Admin.tsx';
 import AccountSettings from './AccountSettings.tsx';
 import ForgotPassword from './ForgotPassword.tsx';
 import ResetPassword from './ResetPassword.tsx';
-import DocumentViewer from './DocumentViewer.tsx';
+
 import './index.css';
 
 const path = window.location.pathname;
 
 let component;
-if (path === '/referral') {
+if (path === '/providers') {
+  component = <ForProviders />;
+} else if (path === '/patients') {
+  component = <ForPatients />;
+} else if (path === '/referral') {
   component = <ReferralForm />;
 } else if (path === '/portal/new-referral') {
   component = <PortalReferralForm />;

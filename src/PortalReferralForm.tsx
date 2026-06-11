@@ -2,7 +2,7 @@ import { useState, FormEvent, useEffect } from 'react';
 import { Send, CheckCircle, ArrowLeft, Shield, Clock, Lock, Loader2 } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import Header from './Header';
-import { formatPersonName, formatCompanyName } from './lib/formatters';
+import { formatPersonName } from './lib/formatters';
 
 interface UserProfile {
   company_name: string;
@@ -225,7 +225,7 @@ export default function PortalReferralForm() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-cream flex items-center justify-center">
         <Loader2 className="h-8 w-8 text-red-600 animate-spin" />
       </div>
     );
@@ -233,9 +233,9 @@ export default function PortalReferralForm() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-cream">
         <Header />
-        <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="pt-36 pb-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
             <div className="bg-white rounded-2xl shadow-xl p-12 text-center border-2 border-green-100">
               <div className="flex justify-center mb-6">
@@ -274,9 +274,9 @@ export default function PortalReferralForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <Header />
-      <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="pt-36 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6">
             <a
@@ -289,7 +289,7 @@ export default function PortalReferralForm() {
           </div>
 
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Submit a Referral</h1>
+            <h1 className="font-display text-4xl font-extrabold text-ink tracking-tight mb-4">Submit a Referral</h1>
             <p className="text-xl text-gray-600 mb-3">
               Submit a referral below. Our team will review the information and begin processing your order promptly.
             </p>
@@ -407,7 +407,7 @@ export default function PortalReferralForm() {
                     name="equipmentNeeded"
                     value={formData.equipmentNeeded}
                     onChange={handleInputChange}
-                    placeholder="e.g., Wheelchair, Hospital Bed, Walker"
+                    placeholder="e.g., Shower chair, raised toilet seat, adult briefs (medium)"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
                   />
                 </div>

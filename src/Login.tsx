@@ -63,21 +63,22 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <Header />
 
-      <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="pt-40 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              Sign In
+            <p className="eyebrow mb-3">Provider Portal</p>
+            <h1 className="font-display text-4xl font-extrabold text-ink tracking-tight mb-2">
+              Welcome back
             </h1>
-            <p className="text-gray-600">
-              Access your referral portal
+            <p className="text-stone-600">
+              Sign in to submit and track referrals
             </p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="card p-8">
             {error && (
               <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start gap-2">
                 <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
@@ -100,7 +101,7 @@ export default function Login() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="input !pl-10"
                     placeholder="you@company.com"
                   />
                 </div>
@@ -120,7 +121,7 @@ export default function Login() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="input !pl-10"
                     placeholder="Enter your password"
                   />
                 </div>
@@ -135,7 +136,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="btn-primary w-full"
               >
                 {loading ? 'Signing In...' : 'Sign In'}
               </button>

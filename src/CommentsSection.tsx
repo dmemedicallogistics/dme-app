@@ -16,13 +16,13 @@ interface CommentsSectionProps {
   isAdmin: boolean;
 }
 
-export default function CommentsSection({ referralId, isAdmin }: CommentsSectionProps) {
+export default function CommentsSection({ referralId, isAdmin: _isAdmin }: CommentsSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [authorName, setAuthorName] = useState('');
+  const [_authorName, setAuthorName] = useState('');
 
   useEffect(() => {
     loadComments();
