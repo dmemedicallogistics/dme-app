@@ -4,21 +4,6 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Refined brand red — deeper, less saturated than default Tailwind red.
-        // Remapped so every existing `red-*` class site-wide picks up the new brand.
-        red: {
-          50: '#FBF5F4',
-          100: '#F7E7E5',
-          200: '#EFCEC9',
-          300: '#E0A9A1',
-          400: '#CE7C72',
-          500: '#BA5347',
-          600: '#A93527',
-          700: '#8C2B20',
-          800: '#73271E',
-          900: '#5F231C',
-          950: '#34110C',
-        },
         cream: '#FAF8F6',
         ink: '#211D1A',
       },
