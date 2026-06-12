@@ -407,7 +407,7 @@ export default function PortalReferralForm() {
                     name="equipmentNeeded"
                     value={formData.equipmentNeeded}
                     onChange={handleInputChange}
-                    placeholder="e.g., Shower chair, raised toilet seat, adult briefs (medium)"
+                    placeholder="e.g., Shower chair, walker, ostomy pouches, adult briefs (medium)"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
                   />
                 </div>

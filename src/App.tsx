@@ -3,6 +3,7 @@ import Footer from './Footer';
 import {
   CheckCircle, Clock, MapPin, Truck, Shield,
   Bath, Package, Stethoscope, HeartHandshake, Phone, Mail, ArrowRight,
+  CircleDot, Droplets, Cross, Accessibility,
 } from 'lucide-react';
 
 const trustItems = [
@@ -17,20 +18,40 @@ const products = [
   {
     icon: Bath,
     title: 'Bath Safety Equipment',
+    badge: 'Core specialty',
     desc: 'Fall-prevention essentials that help patients stay safe and independent at home.',
     items: ['Shower chairs & bath stools', 'Tub transfer benches', 'Grab bars & safety rails', 'Raised toilet seats & commodes'],
   },
   {
     icon: Package,
     title: 'Incontinence Supplies',
+    badge: 'Core specialty',
     desc: 'Discreet, high-absorbency products delivered monthly for daily comfort and dignity.',
-    items: ['Adult briefs & pull-ups', 'Bladder control liners & pads', 'Disposable & reusable underpads', 'Catheters & drainage supplies'],
+    items: ['Adult briefs & pull-ups', 'Bladder control liners & pads', 'Disposable & reusable underpads'],
   },
   {
-    icon: Truck,
-    title: 'Full-Service Fulfillment',
-    desc: 'Every order includes the paperwork — no extra steps for your team or your family.',
-    items: ['Insurance verification & eligibility', 'Prior authorization management', 'Direct home delivery', 'Ongoing refill coordination'],
+    icon: CircleDot,
+    title: 'Ostomy Supplies',
+    desc: 'Reliable monthly supplies with refills coordinated so nothing runs out.',
+    items: ['Pouches & skin barriers', 'Flanges & wafers', 'Adhesives, removers & accessories'],
+  },
+  {
+    icon: Droplets,
+    title: 'Urological Supplies',
+    desc: 'Sterile catheter and collection supplies, shipped discreetly to the door.',
+    items: ['Intermittent & external catheters', 'Drainage bags & accessories', 'Irrigation supplies'],
+  },
+  {
+    icon: Cross,
+    title: 'Wound Care Supplies',
+    desc: 'Dressings and supplies for wound management at home, refilled on schedule.',
+    items: ['Gauze, dressings & bandages', 'Medical tape & wraps', 'Wound cleansers'],
+  },
+  {
+    icon: Accessibility,
+    title: 'Mobility Aids',
+    desc: 'Everyday walking aids that pair naturally with our bath safety line.',
+    items: ['Canes & quad canes', 'Walkers & rollators', 'Crutches & transport chairs'],
   },
 ];
 
@@ -64,8 +85,8 @@ export default function App() {
               Medical supplies, delivered to the patient's door.
             </h1>
             <p className="text-lg sm:text-xl text-stone-600 leading-relaxed">
-              Bath safety equipment and incontinence supplies — with insurance verification,
-              prior authorization, and home delivery handled for you.
+              Bath safety, incontinence, ostomy, wound care, and mobility supplies — with insurance
+              verification, prior authorization, and home delivery handled for you.
             </p>
           </div>
 
@@ -117,13 +138,18 @@ export default function App() {
           <div className="text-center mb-14">
             <p className="eyebrow mb-3">What We Provide</p>
             <h2 className="section-title mb-4">Products & Services</h2>
-            <p className="text-lg text-stone-600 max-w-2xl mx-auto">Specialized in two core categories — keeping patients safe and comfortable at home</p>
+            <p className="text-lg text-stone-600 max-w-2xl mx-auto">Specialists in bath safety and incontinence — with a full catalog of home medical supplies, all delivered to the door</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {products.map(({ icon: Icon, title, desc, items }) => (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map(({ icon: Icon, title, badge, desc, items }) => (
               <div key={title} className="card p-8 hover:shadow-lift transition-shadow">
-                <div className="w-14 h-14 bg-red-50 border border-red-100 rounded-2xl flex items-center justify-center mb-5">
-                  <Icon className="h-7 w-7 text-red-600" />
+                <div className="flex items-start justify-between mb-5">
+                  <div className="w-14 h-14 bg-red-50 border border-red-100 rounded-2xl flex items-center justify-center">
+                    <Icon className="h-7 w-7 text-red-600" />
+                  </div>
+                  {badge && (
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-red-600 bg-red-50 border border-red-100 rounded-full px-3 py-1">{badge}</span>
+                  )}
                 </div>
                 <h3 className="font-display text-xl font-bold text-ink mb-2">{title}</h3>
                 <p className="text-stone-500 text-sm mb-5 leading-relaxed">{desc}</p>
@@ -137,6 +163,19 @@ export default function App() {
                 </ul>
               </div>
             ))}
+          </div>
+          {/* Full-service banner */}
+          <div className="card mt-6 p-7 flex flex-col md:flex-row md:items-center gap-5">
+            <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Truck className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-ink mb-1">Every category, full-service</h3>
+              <p className="text-stone-600 text-sm leading-relaxed">
+                Insurance verification, prior authorization, direct home delivery, and ongoing refill coordination —
+                included with every order, in every category. No rentals or in-home installations; everything ships ready to use.
+              </p>
+            </div>
           </div>
         </div>
       </section>

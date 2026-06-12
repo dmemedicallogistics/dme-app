@@ -23,11 +23,11 @@ const path = window.location.pathname;
 const SEO: Record<string, { title: string; description: string }> = {
   '/providers': {
     title: 'For Healthcare Providers | DME Referrals in Chicagoland – DME Medical Logistics',
-    description: 'Refer DME patients in under 3 minutes. We verify insurance, handle prior authorization, and deliver bath safety and incontinence supplies within 48 hours. Online, phone, or fax referrals.',
+    description: 'Refer DME patients in under 3 minutes. We verify insurance, handle prior authorization, and deliver bath safety, incontinence, ostomy, wound care, and mobility supplies within 48 hours. Online, phone, or fax referrals.',
   },
   '/patients': {
     title: 'For Patients & Caregivers | Home Medical Supplies – DME Medical Logistics',
-    description: 'Bath safety equipment and incontinence supplies delivered to your home in Chicagoland. One phone call — we work with your doctor and insurance. Call (630) 885-0414.',
+    description: 'Bath safety, incontinence, ostomy, wound care, and mobility supplies delivered to your home in Chicagoland. One phone call — we work with your doctor and insurance. Call (630) 885-0414.',
   },
   '/referral': {
     title: 'Submit a Referral | DME Medical Logistics',

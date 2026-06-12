@@ -2,7 +2,7 @@ import Header from './Header';
 import Footer from './Footer';
 import {
   CheckCircle, Clock, Shield, Phone, Bath, Package, Truck,
-  HeartHandshake, ArrowRight,
+  HeartHandshake, ArrowRight, Cross, Accessibility,
 } from 'lucide-react';
 
 const steps = [
@@ -22,7 +22,19 @@ const products = [
     icon: Package,
     title: 'Incontinence Supplies',
     desc: 'Discreet, comfortable products delivered in plain packaging — with refills coordinated for you.',
-    items: ['Adult briefs and pull-ups in all sizes', 'Bladder control pads and liners', 'Bed and chair protective underpads', 'Catheters and related supplies'],
+    items: ['Adult briefs and pull-ups in all sizes', 'Bladder control pads and liners', 'Bed and chair protective underpads'],
+  },
+  {
+    icon: Cross,
+    title: 'Ostomy, Catheter & Wound Care',
+    desc: 'Monthly medical supplies shipped discreetly to your door, refilled before you run out.',
+    items: ['Ostomy pouches, barriers and accessories', 'Catheters and drainage supplies', 'Dressings, gauze, tape and bandages'],
+  },
+  {
+    icon: Accessibility,
+    title: 'Walking & Mobility Aids',
+    desc: 'Simple, sturdy equipment to help you or your loved one get around safely.',
+    items: ['Canes and quad canes', 'Walkers and rollators', 'Crutches and transport chairs'],
   },
 ];
 
@@ -48,7 +60,7 @@ export default function ForPatients() {
               The supplies you need, without the hassle.
             </h1>
             <p className="text-lg sm:text-xl text-stone-600 leading-relaxed mb-8">
-              Bath safety equipment and incontinence supplies delivered to your home.
+              Bath safety equipment, incontinence, ostomy, wound care, and mobility supplies delivered to your home.
               One phone call — we work with your doctor and your insurance so you don't have to.
             </p>
             <div className="flex flex-wrap gap-4 items-center">

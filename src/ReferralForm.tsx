@@ -288,7 +288,7 @@ export default function ReferralForm() {
                 <div className="space-y-4">
                   <div>
                     <label className="label">Equipment Needed <span className="text-red-600">*</span></label>
-                    <textarea required name="equipmentNeeded" value={form.equipmentNeeded} onChange={handleChange} rows={3} className="input resize-none" placeholder="e.g. Shower chair, raised toilet seat, adult briefs (medium)" />
+                    <textarea required name="equipmentNeeded" value={form.equipmentNeeded} onChange={handleChange} rows={3} className="input resize-none" placeholder="e.g. Shower chair, walker, ostomy pouches, adult briefs (medium)" />
                   </div>
                   <div>
                     <label className="label">Diagnosis / Clinical Notes</label>

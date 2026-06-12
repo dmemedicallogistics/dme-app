@@ -12,9 +12,9 @@ export default function Footer() {
               <span className="font-display text-lg font-bold text-white"><span className="text-red-400">DME</span> Medical Logistics</span>
             </div>
             <p className="text-sm leading-relaxed max-w-md">
-              Bath safety equipment and incontinence supplies for patients across the Chicagoland area.
-              We handle insurance verification, prior authorization, and home delivery — so providers
-              and families don't have to.
+              Bath safety, incontinence, ostomy, wound care, and mobility supplies for patients across
+              the Chicagoland area. We handle insurance verification, prior authorization, and home
+              delivery — so providers and families don't have to.
             </p>
           </div>
           {/* Links */}
