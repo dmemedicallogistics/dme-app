@@ -4,6 +4,7 @@ import App from './App.tsx';
 import ForProviders from './ForProviders.tsx';
 import ForPatients from './ForPatients.tsx';
 import ReferralForm from './ReferralForm.tsx';
+import PrivacyPolicy from './PrivacyPolicy.tsx';
 import PortalReferralForm from './PortalReferralForm.tsx';
 
 import Login from './Login.tsx';
@@ -33,6 +34,10 @@ const SEO: Record<string, { title: string; description: string }> = {
     title: 'Submit a Referral | DME Medical Logistics',
     description: 'Submit a DME referral online in 2–3 minutes. Insurance verification and prior authorization handled. Serving Cook, DuPage, and surrounding Illinois counties.',
   },
+  '/privacy': {
+    title: 'Privacy Policy & Terms of Use | DME Medical Logistics',
+    description: 'How DME Medical Logistics collects, uses, and protects patient and referral information, in accordance with HIPAA Privacy and Security Rules.',
+  },
 };
 const seo = SEO[path];
 if (seo) {
@@ -46,6 +51,8 @@ if (path === '/providers') {
   component = <ForProviders />;
 } else if (path === '/patients') {
   component = <ForPatients />;
+} else if (path === '/privacy') {
+  component = <PrivacyPolicy />;
 } else if (path === '/referral') {
   component = <ReferralForm />;
 } else if (path === '/portal/new-referral') {

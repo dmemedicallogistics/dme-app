@@ -28,6 +28,7 @@ export default function Footer() {
                 ['/#insurance', 'Insurance & Coverage'],
                 ['/referral', 'Submit a Referral'],
                 ['/login', 'Provider Portal'],
+                ['/privacy', 'Privacy Policy & Terms'],
               ].map(([href, label]) => (
                 <li key={label}><a href={href} className="hover:text-white transition-colors">{label}</a></li>
               ))}

@@ -91,6 +91,14 @@ export default function ForProviders() {
                 </li>
               ))}
             </ul>
+            <a
+              href="/referral-form.pdf"
+              download="DME-Medical-Logistics-Referral-Form.pdf"
+              className="mt-6 w-full btn-secondary text-sm"
+            >
+              <FileText className="h-4 w-4" /> Download Printable Referral Form (PDF)
+            </a>
+            <p className="text-xs text-stone-400 text-center mt-2">Print, complete, and fax to (630) 360-2011</p>
           </div>
         </div>
       </section>
