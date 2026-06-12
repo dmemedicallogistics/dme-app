@@ -41,7 +41,7 @@ const products = [
 const faqs = [
   { q: 'Do I need to see my doctor first?', a: 'Not necessarily. Call us first — if insurance requires a prescription, we\'ll contact your doctor\'s office directly and handle it for you.' },
   { q: 'How much will it cost me?', a: 'It depends on your insurance plan. Before we process anything, we call your insurance, confirm exactly what\'s covered, and tell you about any cost — no surprises.' },
-  { q: 'What insurance do you take?', a: 'PPO private insurance (in and out of network). We are currently enrolling with Illinois Medicaid. We do not accept Medicare — but call us and we can help you find options.' },
+  { q: 'What insurance do you take?', a: 'PPO private insurance (in and out of network), and we are currently enrolling with Illinois Medicaid. Have Medicare? Still call us — we coordinate Medicare orders through a trusted partner supplier, and you won\'t have to make a second call.' },
   { q: 'How fast can I get my supplies?', a: 'Usually within 48 hours after insurance confirms coverage and we have the required paperwork.' },
   { q: 'Can I order for my parent or someone I care for?', a: 'Yes — caregivers and family members call us every day. We just need the patient\'s information and insurance details, and we take it from there.' },
 ];
@@ -163,7 +163,7 @@ export default function ForPatients() {
             {[
               { ok: true, title: 'PPO private insurance', desc: 'Yes — we accept PPO plans, both in-network and out-of-network. We call your insurance and confirm coverage before processing your order.' },
               { ok: true, soon: true, title: 'Illinois Medicaid', desc: 'Coming soon — we are finishing our enrollment with Illinois Medicaid. Call us and we\'ll let you know the latest.' },
-              { ok: false, title: 'Medicare', desc: 'We do not accept Medicare at this time. If Medicare is your primary insurance, call us anyway — we can point you toward alternatives.' },
+              { ok: true, soon: true, title: 'Medicare', desc: 'We don\'t bill Medicare ourselves — but if you have Medicare, still call us. We work with a trusted, long-established Medicare supplier and coordinate your entire order for you. You won\'t have to make a second phone call.' },
             ].map(({ ok, soon, title, desc }) => (
               <div key={title} className="flex items-start gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${ok ? (soon ? 'bg-amber-100' : 'bg-green-100') : 'bg-stone-200'}`}>

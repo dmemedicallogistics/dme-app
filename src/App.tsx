@@ -67,7 +67,7 @@ const faqs = [
   { q: 'How fast is delivery?', a: 'Up to 48 hours after insurance verification and complete documentation. Timing can vary with insurance response times and the specific items ordered.' },
   { q: 'Can patients request supplies without a doctor’s referral?', a: 'Yes. Call (630) 885-0414 and we’ll coordinate directly with your physician to obtain the prescription insurance requires.' },
   { q: 'Do you accept Medicaid right now?', a: 'We are currently enrolling with Illinois Medicaid (IMPACT). In the meantime we accept PPO private insurance — contact us and we’ll let you know if we can accommodate a specific patient.' },
-  { q: 'Do you accept Medicare?', a: 'No, we do not accept Medicare at this time. If a patient has Medicare as primary coverage, call us and we can help identify alternatives.' },
+  { q: 'Do you accept Medicare?', a: 'Not directly — but Medicare patients are never turned away. Through our fulfillment partnership with a long-established, Medicare-enrolled DME supplier, we coordinate the entire order from intake to delivery while our partner handles the Medicare billing. One referral, no dead ends.' },
   { q: 'What counties do you serve?', a: 'Cook, DuPage, Lake, Kane, Will, McHenry, and Kendall counties. Unsure about your area? Call (630) 885-0414.' },
 ];
 
@@ -262,12 +262,12 @@ export default function App() {
               <h3 className="font-display font-bold text-ink mb-2">Illinois Medicaid</h3>
               <p className="text-stone-500 text-sm leading-relaxed">Actively enrolling through Illinois IMPACT. Once approved, we will accept most Illinois Medicaid plans for qualifying patients.</p>
             </div>
-            <div className="card p-6 border-t-4 !border-t-stone-400">
-              <div className="flex items-center gap-2 text-stone-600 font-bold text-xs uppercase tracking-wider mb-3">
-                <Shield className="h-4 w-4" /> Not Accepted
+            <div className="card p-6 border-t-4 !border-t-blue-400">
+              <div className="flex items-center gap-2 text-blue-700 font-bold text-xs uppercase tracking-wider mb-3">
+                <Shield className="h-4 w-4" /> Via Partner Network
               </div>
               <h3 className="font-display font-bold text-ink mb-2">Medicare</h3>
-              <p className="text-stone-500 text-sm leading-relaxed">We do not accept Medicare at this time. If a patient has Medicare as primary, contact us and we can help identify alternatives.</p>
+              <p className="text-stone-500 text-sm leading-relaxed">We don't bill Medicare directly. Medicare orders are fulfilled through our established, Medicare-enrolled partner supplier — coordinated by our team from referral to delivery.</p>
             </div>
           </div>
           <div className="max-w-5xl mx-auto card p-5 text-sm text-stone-700 bg-white">

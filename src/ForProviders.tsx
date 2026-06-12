@@ -32,7 +32,8 @@ const partners = [
 const faqs = [
   { q: 'What happens after I submit a referral?', a: 'We confirm receipt, verify the patient\'s insurance, obtain any prior authorization, then contact the patient to schedule delivery. Your team gets status updates throughout — by phone, email, or the portal.' },
   { q: 'What if documentation is missing?', a: 'We\'ll reach out right away and tell you exactly what\'s needed. Incomplete referrals aren\'t rejected — we work with you to complete them.' },
-  { q: 'What insurance do you accept?', a: 'PPO private insurance, in and out of network. Illinois Medicaid enrollment is in progress through IMPACT. We do not accept Medicare.' },
+  { q: 'What insurance do you accept?', a: 'PPO private insurance, in and out of network. Illinois Medicaid enrollment is in progress through IMPACT. Medicare orders are fulfilled through our established, Medicare-enrolled partner supplier — we coordinate, they bill.' },
+  { q: 'What if my patient has Medicare, or needs equipment beyond your catalog?', a: 'Send the referral anyway. Through our fulfillment partner network — including a Medicare-enrolled supplier with decades in the business — we coordinate specialty equipment and Medicare orders end to end. Your team makes one call either way, and the patient gets taken care of.' },
   { q: 'Is there any cost to my organization?', a: 'No. Referrals, insurance verification, prior authorization, and the provider portal are all free for referral sources.' },
 ];
 

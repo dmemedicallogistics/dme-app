@@ -65,7 +65,7 @@ export default function Footer() {
 
         <div className="border-t border-white/10 pt-5 text-center text-xs text-stone-500">
           <p>© {new Date().getFullYear()} DME Medical Logistics. All rights reserved.</p>
-          <p className="mt-1">Bloomingdale, IL &nbsp;|&nbsp; IDFPR HME License #203003079 &nbsp;|&nbsp; NPI #1740176874 &nbsp;|&nbsp; We do not accept Medicare.</p>
+          <p className="mt-1">Bloomingdale, IL &nbsp;|&nbsp; IDFPR HME License #203003079 &nbsp;|&nbsp; NPI #1740176874 &nbsp;|&nbsp; Medicare orders fulfilled through our enrolled partner supplier.</p>
         </div>
       </div>
     </footer>
