@@ -32,6 +32,7 @@ export default function ReferralForm() {
     diagnosisNotes: '',
   });
 
+  const [honeypot, setHoneypot] = useState('');
   const [prescription, setPrescription] = useState<FileState>({ file: null, name: '' });
   const [insurance, setInsurance] = useState<FileState[]>([]);
   const [chartNotes, setChartNotes] = useState<FileState>({ file: null, name: '' });
@@ -119,6 +120,7 @@ export default function ReferralForm() {
           type: chartNotes.file.type,
           data: chartNotesB64,
         } : null,
+        company_website: honeypot, // bot trap — must stay empty for real users
       };
 
       const { data: { session } } = await supabase.auth.getSession();
@@ -219,6 +221,17 @@ export default function ReferralForm() {
 
             {/* ── FORM ── */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Honeypot: hidden from real users, traps spam bots. Do not remove. */}
+              <input
+                type="text"
+                name="company_website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                aria-hidden="true"
+                style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', opacity: 0 }}
+              />
               {error && (
                 <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
                   <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
