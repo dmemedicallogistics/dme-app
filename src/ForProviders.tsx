@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 
 const checklist = [
-  { label: 'Completed referral form (online, 2–3 minutes)', required: true },
+  { label: 'Completed referral form (download & fax)', required: true },
   { label: 'Signed prescription / order from physician', required: true },
   { label: 'Insurance card (front & back)', required: true },
   { label: 'Relevant chart notes or clinical documentation', required: false },
@@ -17,7 +17,7 @@ const commitments = [
   { icon: Shield, title: 'We verify every order', desc: 'We call the patient\'s insurance directly to confirm eligibility, covered items, and quantity limits — before anything ships.' },
   { icon: Zap, title: 'Prior auth handled', desc: 'If prior authorization is required, we obtain it from the payer. Your team never touches the paperwork.' },
   { icon: Clock, title: 'Up to 48-hour turnaround', desc: 'From complete referral to home delivery, once eligibility is verified and documentation is in.' },
-  { icon: MonitorSmartphone, title: 'Track it in the portal', desc: 'A free portal account lets your team submit referrals, check status, and message us — no phone tag.' },
+  { icon: MonitorSmartphone, title: 'Track it in the portal', desc: 'A free portal account lets your team check the status of every referral and message us — no phone tag.' },
 ];
 
 const partners = [
@@ -32,7 +32,7 @@ const partners = [
 const faqs = [
   { q: 'What happens after I submit a referral?', a: 'We confirm receipt, verify the patient\'s insurance, obtain any prior authorization, then contact the patient to schedule delivery. Your team gets status updates throughout — by phone, email, or the portal.' },
   { q: 'What if documentation is missing?', a: 'We\'ll reach out right away and tell you exactly what\'s needed. Incomplete referrals aren\'t rejected — we work with you to complete them.' },
-  { q: 'What insurance do you accept?', a: 'PPO private insurance, in and out of network. Illinois Medicaid enrollment is in progress through IMPACT. Medicare orders are fulfilled through our established, Medicare-enrolled partner supplier — we coordinate, they bill.' },
+  { q: 'What insurance do you accept?', a: 'PPO private insurance, in and out of network, and Illinois Medicaid (licensed and enrolled through IMPACT). Medicare orders are fulfilled through our established, Medicare-enrolled partner supplier — we coordinate, they bill.' },
   { q: 'What if my patient has Medicare, or needs equipment beyond your catalog?', a: 'Send the referral anyway. Through our fulfillment partner network — including a Medicare-enrolled supplier with decades in the business — we coordinate specialty equipment and Medicare orders end to end. Your team makes one call either way, and the patient gets taken care of.' },
   { q: 'Is there any cost to my organization?', a: 'No. Referrals, insurance verification, prior authorization, and the provider portal are all free for referral sources.' },
 ];
@@ -52,20 +52,20 @@ export default function ForProviders() {
             </h1>
             <p className="text-lg text-stone-600 leading-relaxed mb-8">
               Built for discharge planners, case managers, physicians, and home health teams.
-              Submit a referral in under three minutes — we verify insurance, obtain prior
-              authorization, and deliver to the patient's home within 48 hours of complete documentation.
+              Download our referral form, fax it over, and we take it from there — verifying insurance,
+              obtaining prior authorization, and delivering to the patient's home within 48 hours of complete documentation.
             </p>
             <div className="flex flex-wrap gap-4">
-              <a href="/referral" className="btn-primary text-base">
-                Submit a Referral <ArrowRight className="h-4 w-4" />
+              <a href="/referral-form.pdf" download="DME-Medical-Logistics-Referral-Form.pdf" className="btn-primary text-base">
+                Download Referral Form <ArrowRight className="h-4 w-4" />
               </a>
               <a href="/signup" className="btn-secondary text-base">
                 Create a Portal Account
               </a>
             </div>
             <p className="text-sm text-stone-500 mt-5">
-              Prefer phone or fax? Call <a href="tel:+16308850414" className="text-red-600 font-semibold hover:underline">(630) 885-0414</a> or
-              fax referrals to <span className="text-stone-700 font-semibold">(630) 360-2011</span> — accepted Mon–Fri, 9 AM–5 PM.
+              Fax completed referrals to <span className="text-stone-700 font-semibold">(630) 360-2011</span>, or call
+              <a href="tel:+16308850414" className="text-red-600 font-semibold hover:underline"> (630) 885-0414</a> — Mon–Fri, 9 AM–5 PM.
             </p>
           </div>
 
@@ -131,15 +131,16 @@ export default function ForProviders() {
             <p className="eyebrow mb-3">Free For Referral Sources</p>
             <h2 className="section-title mb-5">The provider portal: every referral, one dashboard</h2>
             <p className="text-stone-600 leading-relaxed mb-7">
-              Submit new referrals with your agency details pre-filled, track every order's status in
-              real time, upload documents securely, and message our team directly — all in one place.
+              Track the status of every referral you've faxed us in real time, and message our team
+              directly on each order — all in one place. No patient information is stored in the portal;
+              it's a clean status tracker for your team.
             </p>
             <ul className="space-y-3.5 mb-8">
               {[
-                'Real-time status on every referral you submit',
-                'Secure, HIPAA-conscious document uploads',
+                'Real-time status on every referral you send',
+                'No PHI stored online — status tracking only',
                 'Two-way messaging with our team on each order',
-                'Pre-filled forms — submit repeat referrals faster',
+                'One dashboard for your whole team',
               ].map(item => (
                 <li key={item} className="flex items-start gap-3 text-stone-700">
                   <CheckCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
@@ -204,10 +205,10 @@ export default function ForProviders() {
         <div className="max-w-3xl mx-auto text-center">
           <ClipboardList className="h-10 w-10 text-red-200 mx-auto mb-5" />
           <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-white mb-4">Have a patient who needs supplies?</h2>
-          <p className="text-lg text-red-100/90 mb-8">Submit the referral now — we'll confirm receipt and get to work today.</p>
+          <p className="text-lg text-red-100/90 mb-8">Download the referral form, fax it over, and we'll confirm receipt and get to work today.</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a href="/referral" className="inline-flex items-center gap-2 bg-white text-red-700 px-8 py-3.5 rounded-xl font-bold hover:bg-red-50 transition-colors shadow-lift">
-              Submit a Referral <ArrowRight className="h-4 w-4" />
+            <a href="/referral-form.pdf" download="DME-Medical-Logistics-Referral-Form.pdf" className="inline-flex items-center gap-2 bg-white text-red-700 px-8 py-3.5 rounded-xl font-bold hover:bg-red-50 transition-colors shadow-lift">
+              Download Referral Form <ArrowRight className="h-4 w-4" />
             </a>
             <a href="tel:+16308850414" className="inline-flex items-center gap-2 border-2 border-white/40 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-white/10 transition-colors">
               <Phone className="h-4 w-4" /> (630) 885-0414

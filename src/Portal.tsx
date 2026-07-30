@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Loader2, Plus, Settings, Eye } from 'lucide-react';
+import { LogOut, Loader2, FileText, Settings, Eye } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import Header from './Header';
 import CommentsSection from './CommentsSection';
@@ -13,8 +13,6 @@ interface Referral {
   id: number;
   referral_id: string;
   created_at: string;
-  patient_first_name: string;
-  patient_last_name: string;
   equipment_needed: string;
   status: string;
 }
@@ -79,7 +77,7 @@ export default function Portal() {
 
       const { data, error } = await supabase
         .from('referrals')
-        .select('id, referral_id, created_at, patient_first_name, patient_last_name, equipment_needed, status')
+        .select('id, referral_id, created_at, equipment_needed, status')
         .eq('agency_name', userProfile.company_name)
         .order('created_at', { ascending: false });
 
@@ -173,15 +171,22 @@ export default function Portal() {
             ))}
           </div>
 
-          <div className="mb-6 flex flex-wrap gap-3">
-            <a href="/portal/new-referral" className="btn-primary">
-              <Plus className="h-5 w-5" />
-              Submit New Referral
-            </a>
-            <a href="/portal/account" className="btn-secondary">
-              <Settings className="h-5 w-5" />
-              Account Settings
-            </a>
+          <div className="mb-6 card p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="flex-1">
+              <h3 className="font-display font-bold text-ink mb-1">Refer a patient</h3>
+              <p className="text-sm text-stone-600">
+                Download the referral form, complete it, and fax it to <span className="font-semibold text-stone-800">(630) 360-2011</span>.
+                New referrals appear here once our team logs them.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <a href="/referral-form.pdf" download="DME-Medical-Logistics-Referral-Form.pdf" className="btn-primary whitespace-nowrap">
+                <FileText className="h-5 w-5" /> Download Form
+              </a>
+              <a href="/portal/account" className="btn-secondary">
+                <Settings className="h-5 w-5" /> Account
+              </a>
+            </div>
           </div>
 
           <div className="card overflow-hidden">
@@ -194,9 +199,9 @@ export default function Portal() {
             {referrals.length === 0 ? (
               <div className="px-6 py-16 text-center">
                 <p className="text-stone-600 text-lg font-medium mb-1">No referrals yet</p>
-                <p className="text-stone-500 text-sm mb-6">Submit your first referral and it will show up here with live status updates.</p>
-                <a href="/portal/new-referral" className="btn-primary">
-                  <Plus className="h-4 w-4" /> Submit Your First Referral
+                <p className="text-stone-500 text-sm mb-6">Fax us a completed referral form and it will show up here with live status updates.</p>
+                <a href="/referral-form.pdf" download="DME-Medical-Logistics-Referral-Form.pdf" className="btn-primary">
+                  <FileText className="h-4 w-4" /> Download Referral Form
                 </a>
               </div>
             ) : (
@@ -208,13 +213,10 @@ export default function Portal() {
                         Referral ID
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Date Submitted
+                        Date Received
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Patient Name
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Equipment Needed
+                        Equipment
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         Status
@@ -232,9 +234,6 @@ export default function Portal() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           {formatDate(referral.created_at)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {referral.patient_first_name} {referral.patient_last_name}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600">
                           {referral.equipment_needed}

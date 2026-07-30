@@ -56,7 +56,7 @@ const products = [
 ];
 
 const steps = [
-  { n: '1', title: 'Reach Out', desc: 'Providers submit a referral online or by phone. Patients and caregivers can simply call us — we’ll coordinate with the doctor.' },
+  { n: '1', title: 'Reach Out', desc: 'Providers fax us a completed referral form or call. Patients and caregivers can simply call us — we’ll coordinate with the doctor.' },
   { n: '2', title: 'We Verify Insurance', desc: 'We call the insurance company directly to confirm eligibility, covered items, and any prior authorization — at no cost to you.' },
   { n: '3', title: 'Order Prepared', desc: 'Once coverage is confirmed, we prepare the order and contact the patient to schedule a delivery time that works.' },
   { n: '4', title: 'Delivered Home', desc: 'Supplies arrive at the patient’s door. We confirm receipt and follow up on refills so nothing runs out.' },
@@ -66,7 +66,7 @@ const faqs = [
   { q: 'Do I need prior authorization before submitting a referral?', a: 'No — we handle prior authorization for you. Submit the referral with the prescription and chart notes, and we obtain any required authorization directly from the insurance company.' },
   { q: 'How fast is delivery?', a: 'Up to 48 hours after insurance verification and complete documentation. Timing can vary with insurance response times and the specific items ordered.' },
   { q: 'Can patients request supplies without a doctor’s referral?', a: 'Yes. Call (630) 885-0414 and we’ll coordinate directly with your physician to obtain the prescription insurance requires.' },
-  { q: 'Do you accept Medicaid right now?', a: 'We are currently enrolling with Illinois Medicaid (IMPACT). In the meantime we accept PPO private insurance — contact us and we’ll let you know if we can accommodate a specific patient.' },
+  { q: 'Do you accept Medicaid right now?', a: 'Yes — we are licensed and enrolled with Illinois Medicaid (IMPACT), in addition to accepting PPO private insurance.' },
   { q: 'Do you accept Medicare?', a: 'Not directly — but Medicare patients are never turned away. Through our fulfillment partnership with a long-established, Medicare-enrolled DME supplier, we coordinate the entire order from intake to delivery while our partner handles the Medicare billing. One referral, no dead ends.' },
   { q: 'What counties do you serve?', a: 'Cook, DuPage, Lake, Kane, Will, McHenry, and Kendall counties. Unsure about your area? Call (630) 885-0414.' },
 ];
@@ -225,7 +225,7 @@ export default function App() {
               {[
                 'Licensed Illinois HME supplier (IDFPR #203003079)',
                 'PPO insurance accepted — in & out of network',
-                'Illinois Medicaid (IMPACT) enrollment in progress',
+                'Illinois Medicaid (IMPACT) accepted',
                 'We call insurance directly to verify every order',
                 'Prior authorization handled — zero work for your team',
               ].map(item => (
@@ -255,12 +255,12 @@ export default function App() {
               <h3 className="font-display font-bold text-ink mb-2">PPO Private Insurance</h3>
               <p className="text-stone-500 text-sm leading-relaxed">In-network and out-of-network PPO plans. We verify benefits and handle prior authorization before processing any order.</p>
             </div>
-            <div className="card p-6 border-t-4 !border-t-amber-400">
-              <div className="flex items-center gap-2 text-amber-700 font-bold text-xs uppercase tracking-wider mb-3">
-                <Clock className="h-4 w-4" /> Enrollment In Progress
+            <div className="card p-6 border-t-4 !border-t-green-500">
+              <div className="flex items-center gap-2 text-green-700 font-bold text-xs uppercase tracking-wider mb-3">
+                <CheckCircle className="h-4 w-4" /> Accepted
               </div>
               <h3 className="font-display font-bold text-ink mb-2">Illinois Medicaid</h3>
-              <p className="text-stone-500 text-sm leading-relaxed">Actively enrolling through Illinois IMPACT. Once approved, we will accept most Illinois Medicaid plans for qualifying patients.</p>
+              <p className="text-stone-500 text-sm leading-relaxed">Licensed and enrolled through Illinois IMPACT. We accept Illinois Medicaid for qualifying patients.</p>
             </div>
             <div className="card p-6 border-t-4 !border-t-blue-400">
               <div className="flex items-center gap-2 text-blue-700 font-bold text-xs uppercase tracking-wider mb-3">
@@ -302,10 +302,10 @@ export default function App() {
       <div className="bg-gradient-to-br from-red-700 to-red-900 py-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-white mb-4">Ready when you are</h2>
-          <p className="text-lg text-red-100/90 mb-8">Submit a referral in minutes, or call and talk to a real person.</p>
+          <p className="text-lg text-red-100/90 mb-8">Download our referral form and fax it over, or call and talk to a real person.</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a href="/referral" className="inline-flex items-center gap-2 bg-white text-red-700 px-8 py-3.5 rounded-xl font-bold hover:bg-red-50 transition-colors shadow-lift">
-              Submit a Referral <ArrowRight className="h-4 w-4" />
+            <a href="/referral-form.pdf" download="DME-Medical-Logistics-Referral-Form.pdf" className="inline-flex items-center gap-2 bg-white text-red-700 px-8 py-3.5 rounded-xl font-bold hover:bg-red-50 transition-colors shadow-lift">
+              Download Referral Form <ArrowRight className="h-4 w-4" />
             </a>
             <a href="tel:+16308850414" className="inline-flex items-center gap-2 border-2 border-white/40 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-white/10 transition-colors">
               <Phone className="h-4 w-4" /> (630) 885-0414

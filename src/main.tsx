@@ -3,9 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import ForProviders from './ForProviders.tsx';
 import ForPatients from './ForPatients.tsx';
-import ReferralForm from './ReferralForm.tsx';
 import PrivacyPolicy from './PrivacyPolicy.tsx';
-import PortalReferralForm from './PortalReferralForm.tsx';
 
 import Login from './Login.tsx';
 import Signup from './Signup.tsx';
@@ -30,10 +28,6 @@ const SEO: Record<string, { title: string; description: string }> = {
     title: 'For Patients & Caregivers | Home Medical Supplies – DME Medical Logistics',
     description: 'Bath safety, incontinence, ostomy, wound care, and mobility supplies delivered to your home in Chicagoland. One phone call — we work with your doctor and insurance. Call (630) 885-0414.',
   },
-  '/referral': {
-    title: 'Submit a Referral | DME Medical Logistics',
-    description: 'Submit a DME referral online in 2–3 minutes. Insurance verification and prior authorization handled. Serving Cook, DuPage, and surrounding Illinois counties.',
-  },
   '/privacy': {
     title: 'Privacy Policy & Terms of Use | DME Medical Logistics',
     description: 'How DME Medical Logistics collects, uses, and protects patient and referral information, in accordance with HIPAA Privacy and Security Rules.',
@@ -53,13 +47,9 @@ if (path === '/providers') {
   component = <ForPatients />;
 } else if (path === '/privacy') {
   component = <PrivacyPolicy />;
-} else if (path === '/referral') {
-  component = <ReferralForm />;
-} else if (path === '/portal/new-referral') {
-  component = <PortalReferralForm />;
 } else if (path === '/portal/account') {
   component = <AccountSettings />;
-} else if (path === '/dashboard' || path === '/dashboard/view-document') {
+} else if (path === '/dashboard') {
   window.location.replace('/admin');
   component = <Admin />;
 } else if (path === '/login') {

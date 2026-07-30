@@ -85,8 +85,8 @@ export default function Header({ isAuthenticated: _isAuthenticated = false }: He
               <a href={isLoggedIn ? '/portal' : '/login'} onClick={handlePortalClick} className="text-sm font-medium text-stone-600 hover:text-red-600 transition-colors">
                 Provider Portal
               </a>
-              <a href="/referral" className="btn-primary !px-5 !py-2.5 text-sm">
-                Submit a Referral
+              <a href="/providers" className="btn-primary !px-5 !py-2.5 text-sm">
+                Refer a Patient
               </a>
             </div>
 
@@ -111,8 +111,8 @@ export default function Header({ isAuthenticated: _isAuthenticated = false }: He
               <a href={isLoggedIn ? '/portal' : '/login'} onClick={handlePortalClick} className="block py-2.5 px-2 text-stone-700 hover:text-red-600 font-medium">
                 Provider Portal
               </a>
-              <a href="/referral" onClick={() => setMobileMenuOpen(false)} className="btn-primary w-full mt-2">
-                Submit a Referral
+              <a href="/providers" onClick={() => setMobileMenuOpen(false)} className="btn-primary w-full mt-2">
+                Refer a Patient
               </a>
             </div>
           )}

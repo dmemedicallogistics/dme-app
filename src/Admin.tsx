@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Loader2, CheckCircle, XCircle, ClipboardList, Users, Calendar, Building2, User, Package, Eye } from 'lucide-react';
+import { LogOut, Loader2, CheckCircle, XCircle, ClipboardList, Users, Calendar, Building2, Package, Eye, Plus, X } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import Header from './Header';
 import ReferralDetail from './ReferralDetail';
@@ -9,6 +9,7 @@ interface UserAccount {
   email: string;
   approved: boolean;
   created_at: string;
+  company_name: string | null;
 }
 
 interface Referral {
@@ -16,8 +17,6 @@ interface Referral {
   referral_id: string;
   created_at: string;
   agency_name: string;
-  patient_first_name: string;
-  patient_last_name: string;
   equipment_needed: string;
   status: string;
 }
@@ -50,6 +49,13 @@ export default function Admin() {
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [selectedReferralId, setSelectedReferralId] = useState<string | null>(null);
 
+  // New tracking-entry form
+  const [showNew, setShowNew] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [newOffice, setNewOffice] = useState('');
+  const [newEquip, setNewEquip] = useState('');
+  const [newStatus, setNewStatus] = useState(STATUS_OPTIONS[0]);
+
   useEffect(() => {
     checkAdminAuth();
   }, []);
@@ -80,7 +86,7 @@ export default function Admin() {
   const loadAccounts = async () => {
     const { data } = await supabase
       .from('user_profiles')
-      .select('id, email, approved, created_at')
+      .select('id, email, approved, created_at, company_name')
       .order('created_at', { ascending: false });
     setAccounts(data || []);
   };
@@ -88,9 +94,28 @@ export default function Admin() {
   const loadReferrals = async () => {
     const { data } = await supabase
       .from('referrals')
-      .select('id, referral_id, created_at, agency_name, patient_first_name, patient_last_name, equipment_needed, status')
+      .select('id, referral_id, created_at, agency_name, equipment_needed, status')
       .order('created_at', { ascending: false });
     setReferrals(data || []);
+  };
+
+  const createEntry = async () => {
+    if (!newOffice) return;
+    setCreating(true);
+    const office = accounts.find(a => a.id === newOffice);
+    const referral_id = 'REF-' + Date.now().toString(36).toUpperCase();
+    const statusValue = newStatus.toLowerCase().replace(/ /g, '_');
+    await supabase.from('referrals').insert({
+      referral_id,
+      profile_id: newOffice,
+      agency_name: office?.company_name || '',
+      equipment_needed: newEquip,
+      status: statusValue,
+    });
+    await loadReferrals();
+    setShowNew(false);
+    setNewOffice(''); setNewEquip(''); setNewStatus(STATUS_OPTIONS[0]);
+    setCreating(false);
   };
 
   const toggleApproval = async (userId: string, current: boolean) => {
@@ -103,8 +128,15 @@ export default function Admin() {
   const updateStatus = async (id: string, newStatus: string) => {
     setUpdatingStatus(id);
     const statusValue = newStatus.toLowerCase().replace(/ /g, '_');
+    const ref = referrals.find(r => r.id === id);
     await supabase.from('referrals').update({ status: statusValue, updated_at: new Date().toISOString() }).eq('id', id);
     setReferrals(referrals.map(r => r.id === id ? { ...r, status: statusValue } : r));
+    // Notify the referring office (no PHI — reference number + status only). Best-effort.
+    if (ref?.referral_id) {
+      supabase.functions.invoke('notify-status', {
+        body: { referral_id: ref.referral_id, status: newStatus },
+      }).catch(() => {});
+    }
     setUpdatingStatus(null);
   };
 
@@ -174,12 +206,59 @@ export default function Admin() {
 
           {/* ── REFERRALS TAB ── */}
           {tab === 'referrals' && (
+            <>
+            {/* Toolbar: log a faxed referral */}
+            <div className="mb-4 flex justify-between items-center gap-4">
+              <p className="text-sm text-gray-500">Log each faxed referral here as a status entry. No patient information is stored — reference number, office, and status only.</p>
+              {!showNew && (
+                <button onClick={() => setShowNew(true)} className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg font-medium whitespace-nowrap">
+                  <Plus className="h-4 w-4" /> Log Referral
+                </button>
+              )}
+            </div>
+
+            {showNew && (
+              <div className="mb-4 bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-gray-900">New tracking entry</h3>
+                  <button onClick={() => setShowNew(false)} className="p-1 hover:bg-gray-100 rounded"><X className="h-4 w-4 text-gray-500" /></button>
+                </div>
+                <div className="grid sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Referring office</label>
+                    <select value={newOffice} onChange={e => setNewOffice(e.target.value)} className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2">
+                      <option value="">Select an office…</option>
+                      {accounts.filter(a => a.approved && a.company_name).map(a => (
+                        <option key={a.id} value={a.id}>{a.company_name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Equipment (category, no PHI)</label>
+                    <input value={newEquip} onChange={e => setNewEquip(e.target.value)} placeholder="e.g. Bath safety, incontinence" className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Initial status</label>
+                    <select value={newStatus} onChange={e => setNewStatus(e.target.value)} className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2">
+                      {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div className="mt-4 flex justify-end gap-2">
+                  <button onClick={() => setShowNew(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
+                  <button onClick={createEntry} disabled={!newOffice || creating} className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-sm rounded-lg font-medium">
+                    {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />} Create entry
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      {['Referral ID', 'Date Submitted', 'Agency', 'Patient', 'Equipment', 'Status', 'Actions'].map(h => (
+                      {['Referral ID', 'Date Received', 'Referring Office', 'Equipment', 'Status', 'Actions'].map(h => (
                         <th key={h} className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">{h}</th>
                       ))}
                     </tr>
@@ -187,7 +266,7 @@ export default function Admin() {
                   <tbody className="divide-y divide-gray-200">
                     {referrals.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-6 py-16 text-center text-gray-400">
+                        <td colSpan={6} className="px-6 py-16 text-center text-gray-400">
                           No referrals yet
                         </td>
                       </tr>
@@ -211,12 +290,6 @@ export default function Admin() {
                             <div className="flex items-center gap-2">
                               <Building2 className="h-4 w-4 text-gray-400" />
                               <span className="text-sm text-gray-900">{ref.agency_name || '—'}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center gap-2">
-                              <User className="h-4 w-4 text-gray-400" />
-                              <span className="text-sm text-gray-900">{ref.patient_first_name} {ref.patient_last_name}</span>
                             </div>
                           </td>
                           <td className="px-6 py-4 max-w-[200px]">
@@ -247,6 +320,7 @@ export default function Admin() {
                 </table>
               </div>
             </div>
+            </>
           )}
 
           {/* ── ACCOUNTS TAB ── */}
