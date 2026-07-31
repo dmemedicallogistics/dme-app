@@ -116,8 +116,8 @@ export default function AccountSettings() {
     setPasswordSuccessMessage('');
     setPasswordErrorMessage('');
 
-    if (newPassword.length < 6) {
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
+    if (newPassword.length < 10 || !/[A-Za-z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      setPasswordErrorMessage('Password must be at least 10 characters and include both a letter and a number.');
       return;
     }
 
@@ -328,9 +328,9 @@ export default function AccountSettings() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     required
-                    minLength={6}
+                    minLength={10}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    placeholder="At least 6 characters"
+                    placeholder="At least 10 characters, with a letter and a number"
                   />
                 </div>
 
@@ -344,7 +344,7 @@ export default function AccountSettings() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
-                    minLength={6}
+                    minLength={10}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     placeholder="Re-enter your new password"
                   />

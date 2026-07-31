@@ -26,8 +26,8 @@ export default function Signup() {
         return;
       }
 
-      if (formData.password.length < 6) {
-        setError('Password must be at least 6 characters');
+      if (formData.password.length < 10 || !/[A-Za-z]/.test(formData.password) || !/[0-9]/.test(formData.password)) {
+        setError('Password must be at least 10 characters and include both a letter and a number');
         setLoading(false);
         return;
       }
@@ -205,10 +205,11 @@ export default function Signup() {
                     id="password"
                     type="password"
                     required
+                    minLength={10}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className="input !pl-10"
-                    placeholder="At least 6 characters"
+                    placeholder="At least 10 characters, with a letter and a number"
                   />
                 </div>
               </div>
