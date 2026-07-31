@@ -22,11 +22,11 @@ const commitments = [
 
 const partners = [
   { icon: Building2, title: 'Home Health Agencies', desc: 'Streamlined DME for home care teams' },
-  { icon: Building2, title: 'Skilled Nursing Facilities', desc: 'Fast turnaround for patient transitions' },
   { icon: Building2, title: 'Hospitals & Discharge Teams', desc: 'Reliable delivery for seamless discharges' },
   { icon: UserCheck, title: 'Physician Offices & Clinics', desc: 'Direct equipment ordering for outpatient care' },
   { icon: Users, title: 'Case Managers & Coordinators', desc: 'One intake form, zero follow-up burden' },
-  { icon: Heart, title: 'Hospice & Palliative Care', desc: 'Compassionate, timely equipment delivery' },
+  { icon: Building2, title: 'Senior Living Communities', desc: 'Equipment support for residents and staff' },
+  { icon: Heart, title: 'And More', desc: 'Serving the full continuum of care — reach out and we\'ll take it from there' },
 ];
 
 const faqs = [
