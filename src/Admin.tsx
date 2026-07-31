@@ -8,6 +8,7 @@ interface UserAccount {
   id: string;
   email: string;
   approved: boolean;
+  status: 'pending' | 'approved' | 'rejected';
   created_at: string;
   company_name: string | null;
 }
@@ -86,7 +87,7 @@ export default function Admin() {
   const loadAccounts = async () => {
     const { data } = await supabase
       .from('user_profiles')
-      .select('id, email, approved, created_at, company_name')
+      .select('id, email, approved, status, created_at, company_name')
       .order('created_at', { ascending: false });
     setAccounts(data || []);
   };
@@ -118,9 +119,9 @@ export default function Admin() {
     setCreating(false);
   };
 
-  const toggleApproval = async (userId: string, current: boolean) => {
+  const setAccountStatus = async (userId: string, status: 'pending' | 'approved' | 'rejected') => {
     setUpdating(userId);
-    await supabase.from('user_profiles').update({ approved: !current }).eq('id', userId);
+    await supabase.from('user_profiles').update({ status, approved: status === 'approved' }).eq('id', userId);
     await loadAccounts();
     setUpdating(null);
   };
@@ -151,7 +152,7 @@ export default function Admin() {
 
   const formatStatus = (s: string) => s.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
-  const pendingCount = accounts.filter(a => !a.approved).length;
+  const pendingCount = accounts.filter(a => a.status === 'pending').length;
 
   if (loading) {
     return (
@@ -345,18 +346,51 @@ export default function Admin() {
                         <td className="px-6 py-4 text-sm font-medium text-gray-900">{account.email}</td>
                         <td className="px-6 py-4 text-sm text-gray-500">{formatDate(account.created_at)}</td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full ${account.approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                            {account.approved ? <><CheckCircle className="h-3 w-3" /> Approved</> : <><XCircle className="h-3 w-3" /> Pending</>}
+                          <span className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full ${
+                            account.status === 'approved' ? 'bg-green-100 text-green-800' :
+                            account.status === 'rejected' ? 'bg-gray-200 text-gray-700' :
+                            'bg-yellow-100 text-yellow-800'
+                          }`}>
+                            {account.status === 'approved' ? <><CheckCircle className="h-3 w-3" /> Approved</> :
+                             account.status === 'rejected' ? <><XCircle className="h-3 w-3" /> Rejected</> :
+                             <><XCircle className="h-3 w-3" /> Pending</>}
                           </span>
                         </td>
                         <td className="px-6 py-4">
-                          <button
-                            onClick={() => toggleApproval(account.id, account.approved)}
-                            disabled={updating === account.id}
-                            className={`px-4 py-2 text-sm font-semibold rounded-lg disabled:opacity-50 transition-colors ${account.approved ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200'}`}
-                          >
-                            {updating === account.id ? <Loader2 className="h-4 w-4 animate-spin inline" /> : account.approved ? 'Revoke' : 'Approve'}
-                          </button>
+                          <div className="flex items-center gap-2">
+                            {updating === account.id ? (
+                              <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                            ) : account.status === 'pending' ? (
+                              <>
+                                <button
+                                  onClick={() => setAccountStatus(account.id, 'approved')}
+                                  className="px-4 py-2 text-sm font-semibold rounded-lg transition-colors bg-green-100 text-green-700 hover:bg-green-200"
+                                >
+                                  Approve
+                                </button>
+                                <button
+                                  onClick={() => setAccountStatus(account.id, 'rejected')}
+                                  className="px-4 py-2 text-sm font-semibold rounded-lg transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                                >
+                                  Reject
+                                </button>
+                              </>
+                            ) : account.status === 'approved' ? (
+                              <button
+                                onClick={() => setAccountStatus(account.id, 'pending')}
+                                className="px-4 py-2 text-sm font-semibold rounded-lg transition-colors bg-red-100 text-red-700 hover:bg-red-200"
+                              >
+                                Revoke
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => setAccountStatus(account.id, 'pending')}
+                                className="px-4 py-2 text-sm font-semibold rounded-lg transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                              >
+                                Reconsider
+                              </button>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     ))}
