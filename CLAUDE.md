@@ -61,12 +61,28 @@ Don't overstate current licensure/enrollment status in copy — verify current s
 - `user_profiles` RLS previously allowed privilege escalation (any user could set their own `is_admin`/
   `approved`); fixed via a `SECURITY DEFINER is_admin()` helper + trigger blocking non-admin privilege
   changes + rebuilt admin policies. Applied directly to the live Supabase DB.
-- `submit-referral` edge function hardened: origin allowlist (not `*`), field/email validation, file
-  type/size limits, honeypot field `company_website`, HTML-escaped confirmation emails. Deployed.
+- **`submit-referral` edge function — DELETED 2026-07-31, not deployed.** It accepted a full online patient
+  intake (name, DOB, address, diagnosis notes, prescription/insurance card/chart note file uploads), wrote
+  that PHI into `public.referrals`, and emailed it via Resend — all without a BAA in place (see gap below).
+  It was hardened (origin allowlist, validation, file limits, honeypot) but hardening isn't a substitute for
+  a BAA. One real-looking test submission (tied to the admin's own account) had made it into `referrals` and
+  `storage.referral-documents`; both were wiped along with the function. An archived copy of the source
+  lives at `supabase/functions/submit-referral/index.ts` (reconstructed from the dashboard, **not** verified
+  complete — re-check the `referrals` insert columns before ever redeploying). Do not redeploy this function,
+  or build any other online path that collects patient name/DOB/diagnosis/documents, until the HIPAA/BAA gap
+  below is actually closed. The site is intentionally fax/phone-only for referrals right now.
+- **`public.referrals` has 17 dormant PHI columns** left over from the above: `patient_first_name`,
+  `patient_last_name`, `patient_dob`, `patient_address`, `patient_phone`, `diagnosis_notes`,
+  `prescription_url`, `insurance_url`, `chart_notes_url`, plus `contact_phone`/`contact_email`. They're
+  empty and unused by the current frontend (which only reads `agency_name`/`equipment_needed`/`status`), but
+  they still exist in the live schema. Don't populate them from any new code path without re-confirming the
+  BAA situation first; consider dropping them entirely once that's resolved.
 - **HIPAA/BAA gap, open and parked:** Supabase project is on the free tier without a BAA (~$599/mo for
   Supabase Team). Haashim decided not to pay for that yet — plan is to minimize PHI collected instead
   (e.g., trim patient data in confirmation emails) until revisited with a compliance advisor. Don't assume
-  this is resolved; don't add new PHI-heavy fields without flagging the gap.
+  this is resolved; don't add new PHI-heavy fields without flagging the gap. Note this also covers Resend
+  (no BAA on file) and the `dmemedicallogistics@gmail.com` inbox (personal Gmail, not a HIPAA-eligible mail
+  configuration) — both would need to change too, not just Supabase, before any online PHI intake is safe.
 - Before assuming any of the above is still true, verify against the current repo/DB state — this is a
   point-in-time summary, not live status.
 
