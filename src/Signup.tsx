@@ -46,14 +46,14 @@ export default function Signup() {
       if (authData.user) {
         const { error: profileError } = await supabase
           .from('user_profiles')
-          .insert({
-            id: authData.user.id,
+          .update({
             company_name: formData.companyName,
             contact_name: formData.contactName,
             contact_phone: formData.contactPhone,
             email: formData.email,
             approved: false,
-          });
+          })
+          .eq('id', authData.user.id);
 
         if (profileError) {
           console.error('Profile creation error:', profileError);
