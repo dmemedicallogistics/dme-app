@@ -100,11 +100,20 @@ export default function Admin() {
     setReferrals(data || []);
   };
 
+  const nextReferralId = () => {
+    const nums = referrals
+      .map(r => r.referral_id.match(/^REF-(\d+)$/))
+      .filter((m): m is RegExpMatchArray => m !== null)
+      .map(m => parseInt(m[1], 10));
+    const next = (nums.length ? Math.max(...nums) : 0) + 1;
+    return 'REF-' + String(next).padStart(4, '0');
+  };
+
   const createEntry = async () => {
     if (!newOffice) return;
     setCreating(true);
     const office = accounts.find(a => a.id === newOffice);
-    const referral_id = 'REF-' + Date.now().toString(36).toUpperCase();
+    const referral_id = nextReferralId();
     const statusValue = newStatus.toLowerCase().replace(/ /g, '_');
     await supabase.from('referrals').insert({
       referral_id,
