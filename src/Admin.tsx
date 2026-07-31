@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Loader2, CheckCircle, XCircle, ClipboardList, Users, Calendar, Building2, Package, Eye, Plus, X } from 'lucide-react';
+import { LogOut, Loader2, CheckCircle, XCircle, ClipboardList, Users, Calendar, Building2, Package, Eye, Plus, X, Pencil, Trash2, Save } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import Header from './Header';
 import ReferralDetail from './ReferralDetail';
@@ -20,6 +20,7 @@ interface Referral {
   agency_name: string;
   equipment_needed: string;
   status: string;
+  profile_id: string | null;
 }
 
 const STATUS_OPTIONS = [
@@ -50,9 +51,11 @@ export default function Admin() {
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [selectedReferralId, setSelectedReferralId] = useState<string | null>(null);
 
-  // New tracking-entry form
+  // New / edit tracking-entry form
   const [showNew, setShowNew] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [newOffice, setNewOffice] = useState('');
   const [newEquip, setNewEquip] = useState('');
   const [newStatus, setNewStatus] = useState(STATUS_OPTIONS[0]);
@@ -95,7 +98,7 @@ export default function Admin() {
   const loadReferrals = async () => {
     const { data } = await supabase
       .from('referrals')
-      .select('id, referral_id, created_at, agency_name, equipment_needed, status')
+      .select('id, referral_id, created_at, agency_name, equipment_needed, status, profile_id')
       .order('created_at', { ascending: false });
     setReferrals(data || []);
   };
@@ -109,23 +112,63 @@ export default function Admin() {
     return 'REF-' + String(next).padStart(4, '0');
   };
 
-  const createEntry = async () => {
+  const resetForm = () => {
+    setShowNew(false);
+    setEditingId(null);
+    setNewOffice(''); setNewEquip(''); setNewStatus(STATUS_OPTIONS[0]);
+  };
+
+  const openNewEntry = () => {
+    setEditingId(null);
+    setNewOffice(''); setNewEquip(''); setNewStatus(STATUS_OPTIONS[0]);
+    setShowNew(true);
+  };
+
+  const openEditEntry = (ref: Referral) => {
+    setEditingId(ref.id);
+    const office = accounts.find(a => a.id === ref.profile_id) || accounts.find(a => a.company_name === ref.agency_name);
+    setNewOffice(office?.id || '');
+    setNewEquip(ref.equipment_needed || '');
+    setNewStatus(formatStatus(ref.status));
+    setShowNew(true);
+  };
+
+  const saveEntry = async () => {
     if (!newOffice) return;
     setCreating(true);
     const office = accounts.find(a => a.id === newOffice);
-    const referral_id = nextReferralId();
     const statusValue = newStatus.toLowerCase().replace(/ /g, '_');
-    await supabase.from('referrals').insert({
-      referral_id,
-      profile_id: newOffice,
-      agency_name: office?.company_name || '',
-      equipment_needed: newEquip,
-      status: statusValue,
-    });
+
+    if (editingId) {
+      await supabase.from('referrals').update({
+        profile_id: newOffice,
+        agency_name: office?.company_name || '',
+        equipment_needed: newEquip,
+        status: statusValue,
+        updated_at: new Date().toISOString(),
+      }).eq('id', editingId);
+    } else {
+      const referral_id = nextReferralId();
+      await supabase.from('referrals').insert({
+        referral_id,
+        profile_id: newOffice,
+        agency_name: office?.company_name || '',
+        equipment_needed: newEquip,
+        status: statusValue,
+      });
+    }
     await loadReferrals();
-    setShowNew(false);
-    setNewOffice(''); setNewEquip(''); setNewStatus(STATUS_OPTIONS[0]);
+    resetForm();
     setCreating(false);
+  };
+
+  const deleteEntry = async (id: string, referralId: string) => {
+    if (!window.confirm(`Delete tracking entry ${referralId}? This can't be undone.`)) return;
+    setDeletingId(id);
+    await supabase.from('referrals').delete().eq('id', id);
+    await loadReferrals();
+    if (editingId === id) resetForm();
+    setDeletingId(null);
   };
 
   const setAccountStatus = async (userId: string, status: 'pending' | 'approved' | 'rejected') => {
@@ -221,7 +264,7 @@ export default function Admin() {
             <div className="mb-4 flex justify-between items-center gap-4">
               <p className="text-sm text-gray-500">Log each faxed referral here as a status entry. No patient information is stored — reference number, office, and status only.</p>
               {!showNew && (
-                <button onClick={() => setShowNew(true)} className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg font-medium whitespace-nowrap">
+                <button onClick={openNewEntry} className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg font-medium whitespace-nowrap">
                   <Plus className="h-4 w-4" /> Log Referral
                 </button>
               )}
@@ -230,8 +273,8 @@ export default function Admin() {
             {showNew && (
               <div className="mb-4 bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900">New tracking entry</h3>
-                  <button onClick={() => setShowNew(false)} className="p-1 hover:bg-gray-100 rounded"><X className="h-4 w-4 text-gray-500" /></button>
+                  <h3 className="font-semibold text-gray-900">{editingId ? 'Edit tracking entry' : 'New tracking entry'}</h3>
+                  <button onClick={resetForm} className="p-1 hover:bg-gray-100 rounded"><X className="h-4 w-4 text-gray-500" /></button>
                 </div>
                 <div className="grid sm:grid-cols-3 gap-4">
                   <div>
@@ -255,9 +298,10 @@ export default function Admin() {
                   </div>
                 </div>
                 <div className="mt-4 flex justify-end gap-2">
-                  <button onClick={() => setShowNew(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                  <button onClick={createEntry} disabled={!newOffice || creating} className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-sm rounded-lg font-medium">
-                    {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />} Create entry
+                  <button onClick={resetForm} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
+                  <button onClick={saveEntry} disabled={!newOffice || creating} className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-sm rounded-lg font-medium">
+                    {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : editingId ? <Save className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                    {editingId ? 'Save changes' : 'Create entry'}
                   </button>
                 </div>
               </div>
@@ -319,9 +363,22 @@ export default function Admin() {
                             </select>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <button onClick={() => setSelectedReferralId(ref.id)} className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg font-medium transition-colors">
-                              <Eye className="h-4 w-4" /> View
-                            </button>
+                            <div className="flex items-center gap-2">
+                              <button onClick={() => setSelectedReferralId(ref.id)} title="View" className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                                <Eye className="h-4 w-4" />
+                              </button>
+                              <button onClick={() => openEditEntry(ref)} title="Edit" className="p-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg transition-colors">
+                                <Pencil className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => deleteEntry(ref.id, ref.referral_id)}
+                                disabled={deletingId === ref.id}
+                                title="Delete"
+                                className="p-2 bg-white border border-gray-300 hover:bg-red-50 hover:border-red-200 text-gray-700 hover:text-red-600 rounded-lg transition-colors disabled:opacity-50"
+                              >
+                                {deletingId === ref.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       );
