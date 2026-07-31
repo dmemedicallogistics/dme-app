@@ -175,12 +175,12 @@ export default function Portal() {
             <div className="flex-1">
               <h3 className="font-display font-bold text-ink mb-1">Refer a patient</h3>
               <p className="text-sm text-stone-600">
-                Download the referral form, complete it, and fax it to <span className="font-semibold text-stone-800">(630) 360-2011</span>.
+                Download the patient intake form, complete it, and fax it to <span className="font-semibold text-stone-800">(630) 360-2011</span>.
                 New referrals appear here once our team logs them.
               </p>
             </div>
             <div className="flex gap-3">
-              <a href="/referral-form.pdf" download="DME-Medical-Logistics-Referral-Form.pdf" className="btn-primary whitespace-nowrap">
+              <a href="/intake-form.pdf.pdf" download="DME-Medical-Logistics-Patient-Intake-Form.pdf" className="btn-primary whitespace-nowrap">
                 <FileText className="h-5 w-5" /> Download Form
               </a>
               <a href="/portal/account" className="btn-secondary">
@@ -199,9 +199,9 @@ export default function Portal() {
             {referrals.length === 0 ? (
               <div className="px-6 py-16 text-center">
                 <p className="text-stone-600 text-lg font-medium mb-1">No referrals yet</p>
-                <p className="text-stone-500 text-sm mb-6">Fax us a completed referral form and it will show up here with live status updates.</p>
-                <a href="/referral-form.pdf" download="DME-Medical-Logistics-Referral-Form.pdf" className="btn-primary">
-                  <FileText className="h-4 w-4" /> Download Referral Form
+                <p className="text-stone-500 text-sm mb-6">Fax us a completed intake form and it will show up here with live status updates.</p>
+                <a href="/intake-form.pdf.pdf" download="DME-Medical-Logistics-Patient-Intake-Form.pdf" className="btn-primary">
+                  <FileText className="h-4 w-4" /> Download Intake Form
                 </a>
               </div>
             ) : (

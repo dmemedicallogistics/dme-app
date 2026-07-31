@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 
 const checklist = [
-  { label: 'Completed referral form (download & fax)', required: true },
+  { label: 'Completed patient intake form (download & fax)', required: true },
   { label: 'Signed prescription / order from physician', required: true },
   { label: 'Insurance card (front & back)', required: true },
   { label: 'Relevant chart notes or clinical documentation', required: false },
@@ -25,7 +25,7 @@ const partners = [
   { icon: Building2, title: 'Skilled Nursing Facilities', desc: 'Fast turnaround for patient transitions' },
   { icon: Building2, title: 'Hospitals & Discharge Teams', desc: 'Reliable delivery for seamless discharges' },
   { icon: UserCheck, title: 'Physician Offices & Clinics', desc: 'Direct equipment ordering for outpatient care' },
-  { icon: Users, title: 'Case Managers & Coordinators', desc: 'One referral form, zero follow-up burden' },
+  { icon: Users, title: 'Case Managers & Coordinators', desc: 'One intake form, zero follow-up burden' },
   { icon: Heart, title: 'Hospice & Palliative Care', desc: 'Compassionate, timely equipment delivery' },
 ];
 
@@ -52,12 +52,12 @@ export default function ForProviders() {
             </h1>
             <p className="text-lg text-stone-600 leading-relaxed mb-8">
               Built for discharge planners, case managers, physicians, and home health teams.
-              Download our referral form, fax it over, and we take it from there — verifying insurance,
+              Download our patient intake form, fax it over, and we take it from there — verifying insurance,
               obtaining prior authorization, and delivering to the patient's home within 48 hours of complete documentation.
             </p>
             <div className="flex flex-wrap gap-4">
-              <a href="/referral-form.pdf" download="DME-Medical-Logistics-Referral-Form.pdf" className="btn-primary text-base">
-                Download Referral Form <ArrowRight className="h-4 w-4" />
+              <a href="/intake-form.pdf.pdf" download="DME-Medical-Logistics-Patient-Intake-Form.pdf" className="btn-primary text-base">
+                Download Intake Form <ArrowRight className="h-4 w-4" />
               </a>
               <a href="/signup" className="btn-secondary text-base">
                 Create a Portal Account
@@ -73,7 +73,7 @@ export default function ForProviders() {
           <div className="card p-8 shadow-lift">
             <div className="flex items-center gap-3 mb-1">
               <FileText className="h-5 w-5 text-red-600" />
-              <h2 className="font-display text-lg font-bold text-ink">Referral Checklist</h2>
+              <h2 className="font-display text-lg font-bold text-ink">Intake Checklist</h2>
             </div>
             <p className="text-sm text-stone-500 mb-6">Have these ready and we can usually deliver within 48 hours.</p>
             <ul className="space-y-4">
@@ -92,11 +92,11 @@ export default function ForProviders() {
               ))}
             </ul>
             <a
-              href="/referral-form.pdf"
-              download="DME-Medical-Logistics-Referral-Form.pdf"
+              href="/intake-form.pdf.pdf"
+              download="DME-Medical-Logistics-Patient-Intake-Form.pdf"
               className="mt-6 w-full btn-secondary text-sm"
             >
-              <FileText className="h-4 w-4" /> Download Printable Referral Form (PDF)
+              <FileText className="h-4 w-4" /> Download Printable Intake Form (PDF)
             </a>
             <p className="text-xs text-stone-400 text-center mt-2">Print, complete, and fax to (630) 360-2011</p>
           </div>
@@ -205,10 +205,10 @@ export default function ForProviders() {
         <div className="max-w-3xl mx-auto text-center">
           <ClipboardList className="h-10 w-10 text-red-200 mx-auto mb-5" />
           <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-white mb-4">Have a patient who needs supplies?</h2>
-          <p className="text-lg text-red-100/90 mb-8">Download the referral form, fax it over, and we'll confirm receipt and get to work today.</p>
+          <p className="text-lg text-red-100/90 mb-8">Download the patient intake form, fax it over, and we'll confirm receipt and get to work today.</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a href="/referral-form.pdf" download="DME-Medical-Logistics-Referral-Form.pdf" className="inline-flex items-center gap-2 bg-white text-red-700 px-8 py-3.5 rounded-xl font-bold hover:bg-red-50 transition-colors shadow-lift">
-              Download Referral Form <ArrowRight className="h-4 w-4" />
+            <a href="/intake-form.pdf.pdf" download="DME-Medical-Logistics-Patient-Intake-Form.pdf" className="inline-flex items-center gap-2 bg-white text-red-700 px-8 py-3.5 rounded-xl font-bold hover:bg-red-50 transition-colors shadow-lift">
+              Download Intake Form <ArrowRight className="h-4 w-4" />
             </a>
             <a href="tel:+16308850414" className="inline-flex items-center gap-2 border-2 border-white/40 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-white/10 transition-colors">
               <Phone className="h-4 w-4" /> (630) 885-0414

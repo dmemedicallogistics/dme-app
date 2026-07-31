@@ -56,7 +56,7 @@ const products = [
 ];
 
 const steps = [
-  { n: '1', title: 'Reach Out', desc: 'Providers fax us a completed referral form or call. Patients and caregivers can simply call us — we’ll coordinate with the doctor.' },
+  { n: '1', title: 'Reach Out', desc: 'Providers fax us a completed intake form or call. Patients and caregivers can simply call us — we’ll coordinate with the doctor.' },
   { n: '2', title: 'We Verify Insurance', desc: 'We call the insurance company directly to confirm eligibility, covered items, and any prior authorization — at no cost to you.' },
   { n: '3', title: 'Order Prepared', desc: 'Once coverage is confirmed, we prepare the order and contact the patient to schedule a delivery time that works.' },
   { n: '4', title: 'Delivered Home', desc: 'Supplies arrive at the patient’s door. We confirm receipt and follow up on refills so nothing runs out.' },
@@ -302,10 +302,10 @@ export default function App() {
       <div className="bg-gradient-to-br from-red-700 to-red-900 py-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-white mb-4">Ready when you are</h2>
-          <p className="text-lg text-red-100/90 mb-8">Download our referral form and fax it over, or call and talk to a real person.</p>
+          <p className="text-lg text-red-100/90 mb-8">Download our patient intake form and fax it over, or call and talk to a real person.</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a href="/referral-form.pdf" download="DME-Medical-Logistics-Referral-Form.pdf" className="inline-flex items-center gap-2 bg-white text-red-700 px-8 py-3.5 rounded-xl font-bold hover:bg-red-50 transition-colors shadow-lift">
-              Download Referral Form <ArrowRight className="h-4 w-4" />
+            <a href="/intake-form.pdf.pdf" download="DME-Medical-Logistics-Patient-Intake-Form.pdf" className="inline-flex items-center gap-2 bg-white text-red-700 px-8 py-3.5 rounded-xl font-bold hover:bg-red-50 transition-colors shadow-lift">
+              Download Intake Form <ArrowRight className="h-4 w-4" />
             </a>
             <a href="tel:+16308850414" className="inline-flex items-center gap-2 border-2 border-white/40 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-white/10 transition-colors">
               <Phone className="h-4 w-4" /> (630) 885-0414

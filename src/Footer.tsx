@@ -26,7 +26,7 @@ export default function Footer() {
                 ['/patients', 'For Patients & Caregivers'],
                 ['/#products', 'Products & Services'],
                 ['/#insurance', 'Insurance & Coverage'],
-                ['/referral-form.pdf', 'Download Referral Form'],
+                ['/intake-form.pdf.pdf', 'Download Intake Form'],
                 ['/login', 'Provider Portal'],
                 ['/privacy', 'Privacy Policy & Terms'],
               ].map(([href, label]) => (
