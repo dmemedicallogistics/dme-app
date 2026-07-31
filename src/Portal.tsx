@@ -15,6 +15,8 @@ interface Referral {
   created_at: string;
   equipment_needed: string;
   status: string;
+  patient_first_name: string | null;
+  patient_last_name: string | null;
 }
 
 export default function Portal() {
@@ -77,7 +79,7 @@ export default function Portal() {
 
       const { data, error } = await supabase
         .from('referrals')
-        .select('id, referral_id, created_at, equipment_needed, status')
+        .select('id, referral_id, created_at, equipment_needed, status, patient_first_name, patient_last_name')
         .eq('agency_name', userProfile.company_name)
         .order('created_at', { ascending: false });
 
@@ -213,6 +215,9 @@ export default function Portal() {
                         Referral ID
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Patient
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         Date Received
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
@@ -231,6 +236,9 @@ export default function Portal() {
                       <tr key={referral.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           {referral.referral_id}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {referral.patient_first_name ? `${referral.patient_first_name} ${referral.patient_last_name ? referral.patient_last_name + '.' : ''}`.trim() : '—'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           {formatDate(referral.created_at)}

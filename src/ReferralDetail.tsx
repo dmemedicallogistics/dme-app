@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
-import { X, ClipboardList, Building2, Package, Calendar, AlertCircle, Loader2 } from 'lucide-react';
+import { X, ClipboardList, Building2, Package, Calendar, AlertCircle, Loader2, User } from 'lucide-react';
 import CommentsSection from './CommentsSection';
 
 interface ReferralDetailProps {
@@ -15,6 +15,8 @@ interface ReferralData {
   agency_name: string;
   equipment_needed: string;
   status: string;
+  patient_first_name: string | null;
+  patient_last_name: string | null;
 }
 
 export default function ReferralDetail({ referralId, onClose }: ReferralDetailProps) {
@@ -31,7 +33,7 @@ export default function ReferralDetail({ referralId, onClose }: ReferralDetailPr
       setLoading(true);
       const { data, error } = await supabase
         .from('referrals')
-        .select('id, referral_id, created_at, agency_name, equipment_needed, status')
+        .select('id, referral_id, created_at, agency_name, equipment_needed, status, patient_first_name, patient_last_name')
         .eq('id', referralId)
         .maybeSingle();
 
@@ -101,7 +103,13 @@ export default function ReferralDetail({ referralId, onClose }: ReferralDetailPr
         </div>
 
         <div className="px-8 py-6 space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div className="bg-slate-50 rounded-lg p-4">
+              <label className="text-xs font-medium text-slate-500 uppercase flex items-center gap-1"><User className="h-3 w-3" /> Patient</label>
+              <p className="text-sm text-slate-900 font-medium mt-1">
+                {referral.patient_first_name ? `${referral.patient_first_name} ${referral.patient_last_name ? referral.patient_last_name + '.' : ''}`.trim() : '—'}
+              </p>
+            </div>
             <div className="bg-slate-50 rounded-lg p-4">
               <label className="text-xs font-medium text-slate-500 uppercase flex items-center gap-1"><Building2 className="h-3 w-3" /> Referring Office</label>
               <p className="text-sm text-slate-900 font-medium mt-1">{referral.agency_name || '—'}</p>

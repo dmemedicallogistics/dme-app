@@ -21,6 +21,8 @@ interface Referral {
   equipment_needed: string;
   status: string;
   profile_id: string | null;
+  patient_first_name: string | null;
+  patient_last_name: string | null;
 }
 
 const STATUS_OPTIONS = [
@@ -59,6 +61,8 @@ export default function Admin() {
   const [newOffice, setNewOffice] = useState('');
   const [newEquip, setNewEquip] = useState('');
   const [newStatus, setNewStatus] = useState(STATUS_OPTIONS[0]);
+  const [newPatientFirst, setNewPatientFirst] = useState('');
+  const [newPatientLastInitial, setNewPatientLastInitial] = useState('');
 
   useEffect(() => {
     checkAdminAuth();
@@ -98,7 +102,7 @@ export default function Admin() {
   const loadReferrals = async () => {
     const { data } = await supabase
       .from('referrals')
-      .select('id, referral_id, created_at, agency_name, equipment_needed, status, profile_id')
+      .select('id, referral_id, created_at, agency_name, equipment_needed, status, profile_id, patient_first_name, patient_last_name')
       .order('created_at', { ascending: false });
     setReferrals(data || []);
   };
@@ -116,11 +120,13 @@ export default function Admin() {
     setShowNew(false);
     setEditingId(null);
     setNewOffice(''); setNewEquip(''); setNewStatus(STATUS_OPTIONS[0]);
+    setNewPatientFirst(''); setNewPatientLastInitial('');
   };
 
   const openNewEntry = () => {
     setEditingId(null);
     setNewOffice(''); setNewEquip(''); setNewStatus(STATUS_OPTIONS[0]);
+    setNewPatientFirst(''); setNewPatientLastInitial('');
     setShowNew(true);
   };
 
@@ -130,6 +136,8 @@ export default function Admin() {
     setNewOffice(office?.id || '');
     setNewEquip(ref.equipment_needed || '');
     setNewStatus(formatStatus(ref.status));
+    setNewPatientFirst(ref.patient_first_name || '');
+    setNewPatientLastInitial(ref.patient_last_name || '');
     setShowNew(true);
   };
 
@@ -138,6 +146,8 @@ export default function Admin() {
     setCreating(true);
     const office = accounts.find(a => a.id === newOffice);
     const statusValue = newStatus.toLowerCase().replace(/ /g, '_');
+    const patientFirst = newPatientFirst.trim();
+    const patientLastInitial = newPatientLastInitial.trim().slice(0, 1).toUpperCase();
 
     if (editingId) {
       await supabase.from('referrals').update({
@@ -145,6 +155,8 @@ export default function Admin() {
         agency_name: office?.company_name || '',
         equipment_needed: newEquip,
         status: statusValue,
+        patient_first_name: patientFirst || null,
+        patient_last_name: patientLastInitial || null,
         updated_at: new Date().toISOString(),
       }).eq('id', editingId);
     } else {
@@ -155,6 +167,8 @@ export default function Admin() {
         agency_name: office?.company_name || '',
         equipment_needed: newEquip,
         status: statusValue,
+        patient_first_name: patientFirst || null,
+        patient_last_name: patientLastInitial || null,
       });
       // Notify the referring office that a new referral is being tracked. Best-effort.
       supabase.functions.invoke('notify-new-referral', {
@@ -266,7 +280,7 @@ export default function Admin() {
             <>
             {/* Toolbar: log a faxed referral */}
             <div className="mb-4 flex justify-between items-center gap-4">
-              <p className="text-sm text-gray-500">Log each faxed referral here as a status entry. No patient information is stored — reference number, office, and status only.</p>
+              <p className="text-sm text-gray-500">Log each faxed referral here as a status entry. Patient first name &amp; last initial only — no DOB, diagnosis, or other health details are stored.</p>
               {!showNew && (
                 <button onClick={openNewEntry} className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg font-medium whitespace-nowrap">
                   <Plus className="h-4 w-4" /> Log Referral
@@ -280,7 +294,7 @@ export default function Admin() {
                   <h3 className="font-semibold text-gray-900">{editingId ? 'Edit tracking entry' : 'New tracking entry'}</h3>
                   <button onClick={resetForm} className="p-1 hover:bg-gray-100 rounded"><X className="h-4 w-4 text-gray-500" /></button>
                 </div>
-                <div className="grid sm:grid-cols-3 gap-4">
+                <div className="grid sm:grid-cols-4 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Referring office</label>
                     <select value={newOffice} onChange={e => setNewOffice(e.target.value)} className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2">
@@ -289,6 +303,14 @@ export default function Admin() {
                         <option key={a.id} value={a.id}>{a.company_name}</option>
                       ))}
                     </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Patient first name</label>
+                    <input value={newPatientFirst} onChange={e => setNewPatientFirst(e.target.value)} placeholder="e.g. John" className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Last initial</label>
+                    <input value={newPatientLastInitial} onChange={e => setNewPatientLastInitial(e.target.value)} placeholder="e.g. D" maxLength={1} className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2" />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Equipment (category, no PHI)</label>
@@ -316,7 +338,7 @@ export default function Admin() {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      {['Referral ID', 'Date Received', 'Referring Office', 'Equipment', 'Status', 'Actions'].map(h => (
+                      {['Referral ID', 'Patient', 'Date Received', 'Referring Office', 'Equipment', 'Status', 'Actions'].map(h => (
                         <th key={h} className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">{h}</th>
                       ))}
                     </tr>
@@ -324,7 +346,7 @@ export default function Admin() {
                   <tbody className="divide-y divide-gray-200">
                     {referrals.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="px-6 py-16 text-center text-gray-400">
+                        <td colSpan={7} className="px-6 py-16 text-center text-gray-400">
                           No referrals yet
                         </td>
                       </tr>
@@ -337,6 +359,11 @@ export default function Admin() {
                               <ClipboardList className="h-4 w-4 text-gray-400" />
                               <span className="text-sm font-medium text-gray-900">{ref.referral_id || '—'}</span>
                             </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="text-sm text-gray-900">
+                              {ref.patient_first_name ? `${ref.patient_first_name} ${ref.patient_last_name ? ref.patient_last_name + '.' : ''}`.trim() : '—'}
+                            </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center gap-2">

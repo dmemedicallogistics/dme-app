@@ -88,12 +88,20 @@ Don't overstate current licensure/enrollment status in copy — verify current s
   complete — re-check the `referrals` insert columns before ever redeploying). Do not redeploy this function,
   or build any other online path that collects patient name/DOB/diagnosis/documents, until the HIPAA/BAA gap
   below is actually closed. The site is intentionally fax/phone-only for referrals right now.
-- **`public.referrals` has 17 dormant PHI columns** left over from the above: `patient_first_name`,
-  `patient_last_name`, `patient_dob`, `patient_address`, `patient_phone`, `diagnosis_notes`,
-  `prescription_url`, `insurance_url`, `chart_notes_url`, plus `contact_phone`/`contact_email`. They're
-  empty and unused by the current frontend (which only reads `agency_name`/`equipment_needed`/`status`), but
-  they still exist in the live schema. Don't populate them from any new code path without re-confirming the
+- **`public.referrals` has 15 still-dormant PHI columns** left over from the above: `patient_dob`,
+  `patient_address`, `patient_phone`, `diagnosis_notes`, `prescription_url`, `insurance_url`,
+  `chart_notes_url`, plus `contact_phone`/`contact_email`. They're empty and unused by the current frontend,
+  but still exist in the live schema. Don't populate them from any new code path without re-confirming the
   BAA situation first; consider dropping them entirely once that's resolved.
+- **`patient_first_name` / `patient_last_name` — intentionally populated starting 2026-07-31.** Haashim
+  made an informed decision to store patient first name + last-initial-only (e.g. "John D.") on each
+  referral, entered manually by admin in Admin.tsx (not via any online form), so providers can tell whose
+  order is whose. Knowingly accepted as PHI despite the open BAA gap below — not an oversight, revisit if
+  compliance posture changes. `patient_last_name` is deliberately truncated to a single uppercase initial by
+  the frontend before saving; never store a full last name there. Displayed in Admin's referral table,
+  ReferralDetail modal (used by both Admin and Portal), and the Provider Portal's referral table. Deliberately
+  kept OUT of all email notifications (`notify-new-referral`, `notify-status`) to limit PHI exposure via
+  Resend, which has no BAA — those emails only ever reference `referral_id`, `equipment_needed`, and `status`.
 - **HIPAA/BAA gap, open and parked:** Supabase project is on the free tier without a BAA (~$599/mo for
   Supabase Team). Haashim decided not to pay for that yet — plan is to minimize PHI collected instead
   (e.g., trim patient data in confirmation emails) until revisited with a compliance advisor. Don't assume
