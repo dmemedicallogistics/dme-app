@@ -55,6 +55,13 @@ Don't overstate current licensure/enrollment status in copy — verify current s
   admin-gated), `src/lib/supabase.ts` (client init).
 - Email: Resend, domain dmemedicallogistics.com verified (DKIM/SPF/MX in Squarespace DNS, which manages the
   domain). Edge function secret `RESEND_FROM = "DME Medical Logistics <referrals@dmemedicallogistics.com>"`.
+- **Notification edge functions — deployed 2026-07-31**, all PHI-free (reference numbers / business metadata
+  only, no patient data): `send-signup-notification` (Signup.tsx → emails admin on new provider signup),
+  `notify-status` (Admin.tsx → emails the referring office's on-file address when a referral's tracking status
+  changes, looked up server-side via `profile_id`), `send-comment-notification` (CommentsSection.tsx → emails
+  whichever side didn't post a comment that a new message is waiting; deliberately excludes the comment text
+  itself from the email body, since that field is free text). Source lives in `supabase/functions/<name>/index.ts`.
+  Verified working end-to-end via a live test send (delivered in Resend logs) on deploy day.
 
 ## Security — known state (as of June 2026 audit, verify still current)
 
