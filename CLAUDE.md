@@ -60,8 +60,10 @@ Don't overstate current licensure/enrollment status in copy — verify current s
   `notify-status` (Admin.tsx → emails the referring office's on-file address when a referral's tracking status
   changes, looked up server-side via `profile_id`), `send-comment-notification` (CommentsSection.tsx → emails
   whichever side didn't post a comment that a new message is waiting; deliberately excludes the comment text
-  itself from the email body, since that field is free text). Source lives in `supabase/functions/<name>/index.ts`.
-  Verified working end-to-end via a live test send (delivered in Resend logs) on deploy day.
+  itself from the email body, since that field is free text), `notify-new-referral` (Admin.tsx → emails the
+  referring office when a new referral is logged for their account, looked up server-side via `profile_id`).
+  Source lives in `supabase/functions/<name>/index.ts`. Verified working end-to-end via a live test send
+  (delivered in Resend logs) on deploy day.
 - **Supabase Auth custom SMTP — configured 2026-07-31.** Auth emails (password reset, email confirmation if
   ever enabled, magic link, invite, reauthentication) previously went through Supabase's built-in email
   service, which is rate-limited and explicitly not meant for production. Custom SMTP is now enabled

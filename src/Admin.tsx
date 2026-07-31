@@ -156,6 +156,10 @@ export default function Admin() {
         equipment_needed: newEquip,
         status: statusValue,
       });
+      // Notify the referring office that a new referral is being tracked. Best-effort.
+      supabase.functions.invoke('notify-new-referral', {
+        body: { referral_id },
+      }).catch(() => {});
     }
     await loadReferrals();
     resetForm();
