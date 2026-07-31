@@ -56,8 +56,8 @@ export default function AccountSettings() {
       }
 
       setProfile(profileData);
-      setContactName(profileData.contact_name);
-      setContactPhone(profileData.contact_phone);
+      setContactName(profileData.contact_name || '');
+      setContactPhone(profileData.contact_phone || '');
       setLoading(false);
     } catch (err) {
       window.location.href = '/login';
