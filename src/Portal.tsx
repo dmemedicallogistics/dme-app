@@ -138,7 +138,7 @@ export default function Portal() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-8">
             <div>
-              <p className="eyebrow mb-2">{profile?.company_name}</p>
+              <p className="eyebrow mb-2 text-sm">{profile?.company_name}</p>
               <h1 className="font-display text-4xl font-extrabold text-ink tracking-tight mb-2">
                 Welcome back, {profile?.contact_name?.split(' ')[0]}
               </h1>
